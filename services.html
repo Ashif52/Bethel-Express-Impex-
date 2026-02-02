@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Services | Bethel Express & Impex</title>
+    <meta name="description"
+        content="Explore our comprehensive logistics services including international courier, pharmaceutical distribution, and custom logistics solutions.">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Services Page Specific Styles */
+
+        /* Enhanced Service Cards */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+        }
+
+        .service-card {
+            background: var(--bg-light);
+            padding: 50px;
+            border-radius: 4px;
+            transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-gold), var(--accent-gold));
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .service-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(201, 162, 77, 0.05), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .service-card:hover {
+            background: #fff;
+            transform: translateY(-15px);
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.12);
+        }
+
+        .service-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .service-card:hover::after {
+            left: 100%;
+        }
+
+        .service-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary-gold), var(--accent-gold));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            font-size: 32px;
+            color: var(--primary-dark);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+        }
+
+        .service-icon::before {
+            content: '';
+            position: absolute;
+            inset: -5px;
+            border: 2px solid var(--primary-gold);
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
+
+        .service-card:hover .service-icon {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 15px 40px rgba(201, 162, 77, 0.3);
+        }
+
+        .service-card:hover .service-icon::before {
+            opacity: 0.5;
+            inset: -10px;
+        }
+
+        .service-list {
+            font-size: 14px;
+            color: #444;
+        }
+
+        .service-list li {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .service-list li:hover {
+            transform: translateX(5px);
+            color: var(--primary-dark);
+        }
+
+        .service-list li i {
+            color: var(--primary-gold);
+            font-size: 12px;
+        }
+
+        /* Technology Section */
+        .tech-section {
+            background: var(--primary-dark);
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tech-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c9a24d' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 100px;
+            align-items: center;
+        }
+
+        .tech-features {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .tech-feature {
+            display: flex;
+            gap: 25px;
+            align-items: flex-start;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s ease;
+        }
+
+        .tech-feature:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateX(10px);
+            border-color: var(--primary-gold);
+        }
+
+        .tech-feature i {
+            font-size: 30px;
+            color: var(--primary-gold);
+            flex-shrink: 0;
+        }
+
+        .tech-image {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tech-image img {
+            border: 1px solid var(--glass-border);
+            transition: transform 0.6s ease;
+        }
+
+        .tech-image:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Partnership Section */
+        .partnership-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+        }
+
+        .partnership-card {
+            position: relative;
+            height: 350px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .partnership-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+        }
+
+        .partnership-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.2) 50%, transparent 100%);
+            z-index: 1;
+            transition: all 0.4s ease;
+        }
+
+        .partnership-card:hover::before {
+            background: linear-gradient(to top, rgba(201, 162, 77, 0.9) 0%, rgba(0, 0, 0, 0.5) 100%);
+        }
+
+        .partnership-card:hover img {
+            transform: scale(1.1);
+        }
+
+        .partnership-content {
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+            z-index: 2;
+            transition: all 0.4s ease;
+        }
+
+        .partnership-card:hover .partnership-content {
+            transform: translateY(-10px);
+        }
+
+        .partnership-content h4 {
+            color: #fff;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .partnership-content p {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Process Section */
+        .process-section {
+            background: var(--bg-light);
+        }
+
+        .process-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .process-grid::before {
+            content: '';
+            position: absolute;
+            top: 50px;
+            left: 10%;
+            width: 80%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-gold), var(--accent-gold));
+            z-index: 0;
+            opacity: 0.3;
+        }
+
+        .process-step {
+            position: relative;
+            z-index: 1;
+            padding: 30px;
+            background: #fff;
+            transition: all 0.4s ease;
+        }
+
+        .process-step:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        }
+
+        .process-number {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary-gold), var(--accent-gold));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin: 0 auto 25px;
+            transition: all 0.4s ease;
+        }
+
+        .process-step:hover .process-number {
+            transform: scale(1.1) rotate(10deg);
+            box-shadow: 0 10px 30px rgba(201, 162, 77, 0.4);
+        }
+
+        .process-step h4 {
+            margin-bottom: 15px;
+        }
+
+        .process-step p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Additional Services Grid */
+        .additional-services {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            margin-top: 60px;
+        }
+
+        .additional-service {
+            background: #fff;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.4s ease;
+            border: 1px solid #eee;
+        }
+
+        .additional-service:hover {
+            border-color: var(--primary-gold);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        .additional-service i {
+            font-size: 36px;
+            color: var(--primary-gold);
+            margin-bottom: 20px;
+            transition: transform 0.4s ease;
+        }
+
+        .additional-service:hover i {
+            transform: scale(1.2);
+        }
+
+        .additional-service h4 {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .additional-service p {
+            font-size: 13px;
+            color: #888;
+        }
+
+        /* CTA Section */
+        .services-cta {
+            background: linear-gradient(135deg, var(--primary-dark), #1a1a1a);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .services-cta::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 50%, rgba(201, 162, 77, 0.1) 0%, transparent 40%);
+            animation: rotateBg 30s linear infinite;
+        }
+
+        @keyframes rotateBg {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tech-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .partnership-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .process-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .process-grid::before {
+                display: none;
+            }
+
+            .additional-services {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .process-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .additional-services {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Particle Background -->
+    <div id="particles" class="particle-bg"></div>
+
+    <!-- SPLASH SCREEN -->
+    <div id="splash">
+        <div class="route">
+            <span class="parcel"></span>
+        </div>
+        <div class="logo-splash">
+            <h1>BETHEL EXPRESS & IMPEX</h1>
+            <p>Connecting the World, Delivering Excellence</p>
+        </div>
+    </div>
+
+    <header class="scrolled">
+        <div class="container nav-flex">
+            <a href="index.html" class="logo">
+                <img src="assets/images/logo.png" alt="Bethel Express Logo" class="logo-img">
+                <div class="logo-text">
+                    <span class="brand-name">Bethel Express</span>
+                    <span class="brand-tagline">& Impex</span>
+                </div>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="about.html" class="nav-link">About Us</a></li>
+                <li><a href="services.html" class="nav-link active">Our Services</a></li>
+                <li><a href="tracking.html" class="nav-link">Track Shipment</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+            <a href="contact.html" class="btn btn-primary">Request Quote</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Banner -->
+        <div class="page-banner" style="background-image: url('assets/images/digital-globe.jpg');">
+            <div class="container banner-content">
+                <span class="section-tag" style="color: var(--primary-gold);">Global Solutions</span>
+                <h1 style="font-size: 70px;">End-to-End Excellence.<br><span class="gradient-text">Across Every
+                        Mile.</span></h1>
+            </div>
+            <div class="scroll-indicator">
+                <span></span>
+            </div>
+        </div>
+
+        <!-- Service Categories -->
+        <section>
+            <div class="container">
+                <div style="text-align: center; margin-bottom: 80px;" class="reveal">
+                    <span class="section-tag">Core Offerings</span>
+                    <h2 class="section-title">Specialized Distribution Channels.</h2>
+                    <p style="max-width: 600px; margin: 0 auto; color: #666;">From documents to pharmaceuticals, we
+                        handle every shipment with precision and care.</p>
+                </div>
+
+                <div class="services-grid">
+                    <!-- Service 1 -->
+                    <div class="service-card reveal stagger-1">
+                        <div class="service-icon">
+                            <i class="fas fa-plane"></i>
+                        </div>
+                        <h3 style="margin-bottom: 20px;">International Courier</h3>
+                        <p style="color: #666; font-size: 15px; margin-bottom: 25px;">Our flagship service providing
+                            rapid document and parcel delivery to over 200 countries. We offer both Express and Economy
+                            modes to suit your timeline and budget.</p>
+                        <ul class="service-list">
+                            <li><i class="fas fa-check"></i> Door-to-Door Worldwide</li>
+                            <li><i class="fas fa-check"></i> Customs Documentation Support</li>
+                            <li><i class="fas fa-check"></i> Automated Proof of Delivery</li>
+                            <li><i class="fas fa-check"></i> Real-time GPS Tracking</li>
+                        </ul>
+                    </div>
+
+                    <!-- Service 2 -->
+                    <div class="service-card reveal stagger-2">
+                        <div class="service-icon">
+                            <i class="fas fa-pills"></i>
+                        </div>
+                        <h3 style="margin-bottom: 20px;">Pharma Distribution</h3>
+                        <p style="color: #666; font-size: 15px; margin-bottom: 25px;">TNMSC Licensed wholesale supply
+                            chain for healthcare products. We ensure high-compliance storage and transit for
+                            life-critical medicines and diagnostics.</p>
+                        <ul class="service-list">
+                            <li><i class="fas fa-check"></i> Cold Chain Management</li>
+                            <li><i class="fas fa-check"></i> Validated Packaging Solutions</li>
+                            <li><i class="fas fa-check"></i> Last-Mile Local Distribution</li>
+                            <li><i class="fas fa-check"></i> Temperature Monitoring</li>
+                        </ul>
+                    </div>
+
+                    <!-- Service 3 -->
+                    <div class="service-card reveal stagger-3">
+                        <div class="service-icon">
+                            <i class="fas fa-warehouse"></i>
+                        </div>
+                        <h3 style="margin-bottom: 20px;">Custom Logistics</h3>
+                        <p style="color: #666; font-size: 15px; margin-bottom: 25px;">Tailored supply chain solutions
+                            for e-commerce, manufacturing, and trade. We optimize your inventory movement for maximum
+                            efficiency.</p>
+                        <ul class="service-list">
+                            <li><i class="fas fa-check"></i> Strategic Warehousing</li>
+                            <li><i class="fas fa-check"></i> Inventory Management</li>
+                            <li><i class="fas fa-check"></i> Bulk Cargo Consolidation</li>
+                            <li><i class="fas fa-check"></i> API Integration</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Additional Services -->
+                <div class="additional-services">
+                    <div class="additional-service reveal stagger-1">
+                        <i class="fas fa-file-invoice"></i>
+                        <h4>Documentation</h4>
+                        <p>Complete export/import paperwork handling</p>
+                    </div>
+                    <div class="additional-service reveal stagger-2">
+                        <i class="fas fa-shield-alt"></i>
+                        <h4>Insurance</h4>
+                        <p>Comprehensive cargo protection plans</p>
+                    </div>
+                    <div class="additional-service reveal stagger-3">
+                        <i class="fas fa-clock"></i>
+                        <h4>Express Delivery</h4>
+                        <p>Same-day and next-day options</p>
+                    </div>
+                    <div class="additional-service reveal stagger-4">
+                        <i class="fas fa-headset"></i>
+                        <h4>24/7 Support</h4>
+                        <p>Round-the-clock customer assistance</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technology Section -->
+        <section class="tech-section">
+            <div class="container">
+                <div class="tech-grid">
+                    <div class="reveal-left">
+                        <span class="section-tag" style="color: var(--primary-gold);">Innovation Hub</span>
+                        <h2 class="section-title" style="color: #fff;">Technology Driven Tracking.</h2>
+                        <p style="color: var(--text-grey); margin-bottom: 30px;">We use an integrated digital dashboard
+                            to monitor every single shipment in real-time. From API-based tracking to automated delivery
+                            notifications, we keep you informed at every step.</p>
+
+                        <div class="tech-features">
+                            <div class="tech-feature">
+                                <i class="fas fa-microchip"></i>
+                                <div>
+                                    <h4 style="color: #fff; margin-bottom: 8px;">Proprietary LMS</h4>
+                                    <p style="color: var(--text-grey); font-size: 14px;">Logistics Management System for
+                                        high-frequency tracking updates.</p>
+                                </div>
+                            </div>
+                            <div class="tech-feature">
+                                <i class="fas fa-mobile-alt"></i>
+                                <div>
+                                    <h4 style="color: #fff; margin-bottom: 8px;">Mobile Alerts</h4>
+                                    <p style="color: var(--text-grey); font-size: 14px;">Instant SMS and email
+                                        notifications for every milestone.</p>
+                                </div>
+                            </div>
+                            <div class="tech-feature">
+                                <i class="fas fa-code"></i>
+                                <div>
+                                    <h4 style="color: #fff; margin-bottom: 8px;">API Integration</h4>
+                                    <p style="color: var(--text-grey); font-size: 14px;">Seamless connection with your
+                                        e-commerce and ERP systems.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tech-image reveal-right">
+                        <img src="assets/images/smart-logistics.jpg" alt="Logistics Technology">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Partnership Section Expanded -->
+        <section>
+            <div class="container">
+                <div style="text-align: center; margin-bottom: 80px;" class="reveal">
+                    <span class="section-tag">Global Networking</span>
+                    <h2 class="section-title">One Network. Global Reach.</h2>
+                    <p style="max-width: 600px; margin: 0 auto; color: #666;">Strategic alliances with world-leading
+                        courier services ensure unmatched speed and reliability.</p>
+                </div>
+                <div class="partnership-grid">
+                    <div class="partnership-card reveal stagger-1">
+                        <img src="assets/images/fedex-flight.jpg" alt="Fedex">
+                        <div class="partnership-content">
+                            <h4>FedEx Alliance</h4>
+                            <p>Specialized in North American & European Priority routes with 99.5% on-time delivery.</p>
+                        </div>
+                    </div>
+                    <div class="partnership-card reveal stagger-2">
+                        <img src="assets/images/dhl-transit.jpg" alt="DHL">
+                        <div class="partnership-content">
+                            <h4>DHL Global Air</h4>
+                            <p>High-speed document express network covering 180+ nations with customs expertise.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Process Section -->
+        <section class="process-section">
+            <div class="container">
+                <div style="text-align: center; margin-bottom: 80px;" class="reveal">
+                    <span class="section-tag">Working Process</span>
+                    <h2 class="section-title">How We Move Your Business.</h2>
+                </div>
+                <div class="process-grid">
+                    <div class="process-step reveal stagger-1">
+                        <div class="process-number">01</div>
+                        <h4>Booking</h4>
+                        <p>Digital or phone booking with customized quote generation in minutes.</p>
+                    </div>
+                    <div class="process-step reveal stagger-2">
+                        <div class="process-number">02</div>
+                        <h4>Pickup</h4>
+                        <p>Safe collection from your doorstep by our verified logistics team.</p>
+                    </div>
+                    <div class="process-step reveal stagger-3">
+                        <div class="process-number">03</div>
+                        <h4>Transit</h4>
+                        <p>Global routing via our elite airline and shipping partners.</p>
+                    </div>
+                    <div class="process-step reveal stagger-4">
+                        <div class="process-number">04</div>
+                        <h4>Delivery</h4>
+                        <p>Safe handover with real-time POD confirmation and photo proof.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="services-cta">
+            <div class="container" style="position: relative; z-index: 2;">
+                <div class="reveal" style="max-width: 700px; margin: 0 auto;">
+                    <span class="section-tag" style="color: var(--primary-gold);">Get Started</span>
+                    <h2 class="section-title" style="color: #fff;">Ready to Transform Your Logistics?</h2>
+                    <p style="color: var(--text-grey); margin-bottom: 40px;">Partner with Bethel Express for seamless,
+                        reliable, and technology-driven shipping solutions.</p>
+                    <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                        <a href="contact.html" class="btn btn-primary">
+                            <i class="fas fa-paper-plane" style="margin-right: 10px;"></i> Request a Quote
+                        </a>
+                        <a href="tracking.html" class="btn btn-outline">
+                            <i class="fas fa-search" style="margin-right: 10px;"></i> Track Shipment
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+
+        <!-- Main Footer -->
+        <div class="footer-main">
+            <div class="container">
+                <div class="footer-grid">
+                    <!-- Brand Column -->
+                    <div class="footer-brand">
+                        <div class="footer-logo-wrap">
+                            <img src="assets/images/logo.png" alt="Bethel Express Logo" class="footer-logo-img">
+                            <div class="footer-logo-text">BETHEL<br><span>EXPRESS & IMPEX</span></div>
+                        </div>
+                        <p class="footer-desc">Your premium logistics partner specializing in international courier and
+                            wholesale pharmaceutical distribution. TNMSC Licensed & Globally Strategic.</p>
+                        <div class="footer-certs">
+                            <span class="cert-badge"><i class="fas fa-certificate"></i> TNMSC Licensed</span>
+                            <span class="cert-badge"><i class="fas fa-shield-alt"></i> ISO Certified</span>
+                        </div>
+                        <div class="footer-social">
+                            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                            <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                        </div>
+                    </div>
+
+                    <!-- Quick Links -->
+                    <div>
+                        <h4 class="footer-title">Quick Links</h4>
+                        <ul class="footer-links">
+                            <li><a href="index.html"><i class="fas fa-chevron-right"></i> Home</a></li>
+                            <li><a href="about.html"><i class="fas fa-chevron-right"></i> About Us</a></li>
+                            <li><a href="services.html"><i class="fas fa-chevron-right"></i> Our Services</a></li>
+                            <li><a href="tracking.html"><i class="fas fa-chevron-right"></i> Track Shipment</a></li>
+                            <li><a href="contact.html"><i class="fas fa-chevron-right"></i> Contact</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Services -->
+                    <div>
+                        <h4 class="footer-title">Services</h4>
+                        <ul class="footer-links">
+                            <li><a href="services.html"><i class="fas fa-chevron-right"></i> International Courier</a>
+                            </li>
+                            <li><a href="services.html"><i class="fas fa-chevron-right"></i> Pharma Distribution</a>
+                            </li>
+                            <li><a href="services.html"><i class="fas fa-chevron-right"></i> Custom Logistics</a></li>
+                            <li><a href="services.html"><i class="fas fa-chevron-right"></i> Express Delivery</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Contact Info -->
+                    <div>
+                        <h4 class="footer-title">Contact Us</h4>
+                        <div class="footer-contact-item">
+                            <div class="footer-contact-icon"><i class="fas fa-phone"></i></div>
+                            <div class="footer-contact-text">
+                                <strong>Phone</strong>
+                                <a href="tel:+919790749934">+91 97907 49934</a>
+                            </div>
+                        </div>
+                        <div class="footer-contact-item">
+                            <div class="footer-contact-icon"><i class="fas fa-envelope"></i></div>
+                            <div class="footer-contact-text">
+                                <strong>Email</strong>
+                                <a href="mailto:bethelexpress5@gmail.com">bethelexpress5@gmail.com</a>
+                            </div>
+                        </div>
+                        <div class="footer-contact-item">
+                            <div class="footer-contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+                            <div class="footer-contact-text">
+                                <strong>Address</strong>
+                                Nungambakkam, Chennai, India
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer Bottom -->
+                <div class="footer-bottom">
+                    <p>&copy; 2026 BETHEL EXPRESS & IMPEX. All rights reserved.</p>
+                    <div class="footer-bottom-links">
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms of Service</a>
+                        <a href="#">Cookie Policy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/script.js"></script>
+</body>
+
+</html>

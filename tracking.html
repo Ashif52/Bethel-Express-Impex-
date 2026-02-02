@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Shipment | Bethel Express & Impex</title>
+    <meta name="description"
+        content="Track your international courier and pharmaceutical shipments in real-time with our advanced logistics tracking system.">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Tracking Page Specific Styles */
+
+        /* Enhanced Tracking Card */
+        .tracking-card {
+            background: var(--text-white);
+            padding: 80px;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.15);
+            margin-top: -120px;
+            position: relative;
+            z-index: 10;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .tracking-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg, var(--primary-gold), var(--accent-gold), var(--primary-gold));
+            background-size: 200% 100%;
+            animation: gradientShift 3s ease infinite;
+        }
+
+        @keyframes gradientShift {
+
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        .tracking-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 50px;
+        }
+
+        .tracking-input-group {
+            display: flex;
+            border: 2px solid #eee;
+            border-radius: 4px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            background: #fff;
+        }
+
+        .tracking-input-group:focus-within {
+            border-color: var(--primary-gold);
+            box-shadow: 0 10px 40px rgba(201, 162, 77, 0.15);
+        }
+
+        .tracking-input-group input {
+            flex: 1;
+            padding: 22px 30px;
+            border: none;
+            font-family: inherit;
+            font-size: 16px;
+            background: transparent;
+            letter-spacing: 1px;
+        }
+
+        .tracking-input-group input:focus {
+            outline: none;
+        }
+
+        .tracking-input-group input::placeholder {
+            color: #aaa;
+        }
+
+        .tracking-input-group .btn {
+            border-radius: 0;
+            padding: 20px 50px;
+        }
+
+        /* Result Panel */
+        .tracking-result {
+            display: none;
+            margin-top: 60px;
+            padding-top: 60px;
+            border-top: 2px solid var(--bg-light);
+            animation: slideUp 0.6s ease;
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 50px;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .result-id h2 {
+            color: var(--primary-gold);
+            font-size: 42px;
+            letter-spacing: 2px;
+        }
+
+        .result-status {
+            text-align: right;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            color: #2e7d32;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 700;
+            animation: pulse 2s infinite;
+        }
+
+        .status-badge i {
+            font-size: 18px;
+        }
+
+        /* Route Visualizer */
+        .route-visualizer {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 60px;
+            position: relative;
+            padding: 30px 0;
+        }
+
+        .route-visualizer::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 8%;
+            width: 84%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-gold) 70%, #ddd 70%);
+            transform: translateY(-50%);
+            z-index: 0;
+            border-radius: 2px;
+        }
+
+        .route-step {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .route-dot {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .route-dot.completed {
+            background: linear-gradient(135deg, var(--primary-gold), var(--accent-gold));
+            color: var(--primary-dark);
+            box-shadow: 0 5px 20px rgba(201, 162, 77, 0.3);
+        }
+
+        .route-dot.active {
+            border: 3px solid var(--primary-gold);
+            background: #fff;
+            color: var(--primary-gold);
+            animation: pulseActive 2s infinite;
+        }
+
+        .route-dot.active::after {
+            content: '';
+            position: absolute;
+            inset: -8px;
+            border: 2px solid rgba(201, 162, 77, 0.3);
+            border-radius: 50%;
+            animation: expandRing 2s infinite;
+        }
+
+        @keyframes pulseActive {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        @keyframes expandRing {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        .route-dot.pending {
+            background: #e0e0e0;
+            color: #999;
+        }
+
+        .route-dot:hover {
+            transform: scale(1.15);
+        }
+
+        .route-label {
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .route-location {
+            font-size: 12px;
+            color: #888;
+        }
+
+        /* Milestones Timeline */
+        .milestones-section {
+            background: var(--bg-light);
+            padding: 50px;
+            border-radius: 8px;
+        }
+
+        .milestones-section h4 {
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .milestones-section h4 i {
+            color: var(--primary-gold);
+        }
+
+        .milestone-list {
+            border-left: 3px solid var(--primary-gold);
+            padding-left: 35px;
+        }
+
+        .milestone-item {
+            position: relative;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .milestone-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .milestone-item::before {
+            content: '';
+            position: absolute;
+            left: -43px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            background: var(--primary-gold);
+            border-radius: 50%;
+            border: 3px solid #fff;
+            box-shadow: 0 0 0 3px rgba(201, 162, 77, 0.2);
+        }
+
+        .milestone-item.latest::before {
+            animation: pulse 2s infinite;
+        }
+
+        .milestone-item.past {
+            opacity: 0.6;
+        }
+
+        .milestone-item.past::before {
+            background: #bbb;
+        }
+
+        .milestone-title {
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .milestone-title i {
+            color: var(--primary-gold);
+            font-size: 14px;
+        }
+
+        .milestone-time {
+            font-size: 13px;
+            color: #888;
+        }
+
+        /* Security Section */
+        .security-section {
+            background: var(--bg-light);
+        }
+
+        .security-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 100px;
+            align-items: center;
+        }
+
+        .security-content {
+            animation: fadeInLeft 0.8s ease;
+        }
+
+        .security-list {
+            font-size: 15px;
+            color: #666;
+        }
+
+        .security-list li {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .security-list li:hover {
+            transform: translateX(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .security-list li i {
+            color: var(--primary-gold);
+            font-size: 20px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .security-image {
+            position: relative;
+        }
+
+        .security-image img {
+            width: 100%;
+            box-shadow: 25px 25px 0 var(--primary-gold);
+            transition: all 0.4s ease;
+        }
+
+        .security-image:hover img {
+            transform: scale(1.02);
+            box-shadow: 30px 30px 0 var(--primary-gold);
+        }
+
+        .insurance-badge {
+            position: absolute;
+            top: 30px;
+            left: -30px;
+            background: var(--primary-dark);
+            color: #fff;
+            padding: 20px 30px;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .insurance-badge i {
+            color: var(--primary-gold);
+            margin-right: 10px;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 80px;
+        }
+
+        .quick-action {
+            background: #fff;
+            padding: 40px;
+            text-align: center;
+            border: 1px solid #eee;
+            transition: all 0.4s ease;
+        }
+
+        .quick-action:hover {
+            border-color: var(--primary-gold);
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+        }
+
+        .quick-action i {
+            font-size: 40px;
+            color: var(--primary-gold);
+            margin-bottom: 20px;
+            transition: transform 0.4s ease;
+        }
+
+        .quick-action:hover i {
+            transform: scale(1.2);
+        }
+
+        .quick-action h4 {
+            margin-bottom: 10px;
+        }
+
+        .quick-action p {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 20px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .tracking-card {
+                padding: 50px 30px;
+            }
+
+            .security-grid {
+                grid-template-columns: 1fr;
+                gap: 50px;
+            }
+
+            .route-visualizer {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 30px;
+            }
+
+            .route-visualizer::before {
+                display: none;
+            }
+
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .result-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .result-status {
+                text-align: center;
+            }
+
+            .route-visualizer {
+                grid-template-columns: 1fr;
+            }
+
+            .tracking-input-group {
+                flex-direction: column;
+            }
+
+            .tracking-input-group .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Particle Background -->
+    <div id="particles" class="particle-bg"></div>
+
+    <!-- SPLASH SCREEN -->
+    <div id="splash">
+        <div class="route">
+            <span class="parcel"></span>
+        </div>
+        <div class="logo-splash">
+            <h1>BETHEL EXPRESS & IMPEX</h1>
+            <p>Connecting the World, Delivering Excellence</p>
+        </div>
+    </div>
+
+    <header class="scrolled">
+        <div class="container nav-flex">
+            <a href="index.html" class="logo">
+                <img src="assets/images/logo.png" alt="Bethel Express Logo" class="logo-img">
+                <div class="logo-text">
+                    <span class="brand-name">Bethel Express</span>
+                    <span class="brand-tagline">& Impex</span>
+                </div>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="about.html" class="nav-link">About Us</a></li>
+                <li><a href="services.html" class="nav-link">Our Services</a></li>
+                <li><a href="tracking.html" class="nav-link active">Track Shipment</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+            <a href="contact.html" class="btn btn-primary">Request Quote</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Banner -->
+        <div class="page-banner" style="background-image: url('assets/images/cargo-truck.jpg'); height: 55vh;">
+            <div class="container banner-content">
+                <span class="section-tag" style="color: var(--primary-gold);">Live Status</span>
+                <h1 style="font-size: 60px;">Every Turn. Every Port.<br><span class="gradient-text">Tracked.</span></h1>
+            </div>
+            <div class="scroll-indicator">
+                <span></span>
+            </div>
+        </div>
+
+        <!-- Tracking Interface -->
+        <section style="padding-top: 0;">
+            <div class="container">
+                <div class="tracking-card">
+                    <div class="tracking-header">
+                        <span class="section-tag">Logistics Intelligence</span>
+                        <h2 style="font-size: 36px; margin-bottom: 20px;">Trace Your Shipment.</h2>
+                        <p style="color: #666;">Get real-time updates on your international courier
+                            or pharmaceutical cargo. Enter your Bethel Tracking ID below.</p>
+                    </div>
+
+                    <div class="tracking-input-group">
+                        <i class="fas fa-search"
+                            style="padding: 22px; color: var(--primary-gold); font-size: 20px;"></i>
+                        <input type="text" placeholder="Enter Tracking ID (e.g., BTX-1029304857)" id="trackNum">
+                        <button class="btn btn-primary" id="searchBtn">
+                            <i class="fas fa-radar" style="margin-right: 10px;"></i> FIND PARCEL
+                        </button>
+                    </div>
+
+                    <!-- Full Tracking Result Panel -->
+                    <div id="resWrap" class="tracking-result">
+                        <div class="result-header">
+                            <div class="result-id">
+                                <h4
+                                    style="color: #888; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">
+                                    <i class="fas fa-box" style="margin-right: 8px;"></i> SHIPMENT ID
+                                </h4>
+                                <h2 id="resId"></h2>
+                            </div>
+                            <div class="result-status">
+                                <div class="status-badge">
+                                    <i class="fas fa-shipping-fast"></i>
+                                    <span>IN TRANSIT</span>
+                                </div>
+                                <p style="margin-top: 15px; font-size: 14px; color: #888;">
+                                    Expected Arrival: <strong style="color: var(--primary-dark);">Feb 08, 2026</strong>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Route Visualizer -->
+                        <div class="route-visualizer">
+                            <div class="route-step">
+                                <div class="route-dot completed">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <p class="route-label">Pickup</p>
+                                <p class="route-location">Chennai, IN</p>
+                            </div>
+                            <div class="route-step">
+                                <div class="route-dot completed">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <p class="route-label">Gateway</p>
+                                <p class="route-location">Mumbai, IN</p>
+                            </div>
+                            <div class="route-step">
+                                <div class="route-dot active">
+                                    <i class="fas fa-plane"></i>
+                                </div>
+                                <p class="route-label" style="color: var(--primary-gold);">Transit</p>
+                                <p class="route-location">International Air</p>
+                            </div>
+                            <div class="route-step" style="opacity: 0.4;">
+                                <div class="route-dot pending"></div>
+                                <p class="route-label">Delivery</p>
+                                <p class="route-location">Pending</p>
+                            </div>
+                        </div>
+
+                        <!-- Detail List -->
+                        <div class="milestones-section">
+                            <h4><i class="fas fa-history"></i> Shipment Milestones</h4>
+                            <div class="milestone-list">
+                                <div class="milestone-item latest">
+                                    <p class="milestone-title">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        Arrived at International Sorting Hub (Dubai)
+                                    </p>
+                                    <p class="milestone-time">Feb 02, 2026 | 21:40 PM</p>
+                                </div>
+                                <div class="milestone-item past">
+                                    <p class="milestone-title">
+                                        <i class="fas fa-truck"></i>
+                                        Shipment Forwarded to Transit Hub
+                                    </p>
+                                    <p class="milestone-time">Feb 01, 2026 | 14:15 PM</p>
+                                </div>
+                                <div class="milestone-item past">
+                                    <p class="milestone-title">
+                                        <i class="fas fa-clipboard-check"></i>
+                                        Manifest Generated at Origin
+                                    </p>
+                                    <p class="milestone-time">Jan 31, 2026 | 09:30 AM</p>
+                                </div>
+                                <div class="milestone-item past">
+                                    <p class="milestone-title">
+                                        <i class="fas fa-box-open"></i>
+                                        Package Received at Bethel Express
+                                    </p>
+                                    <p class="milestone-time">Jan 31, 2026 | 08:00 AM</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="quick-actions reveal">
+                        <div class="quick-action">
+                            <i class="fas fa-comment-dots"></i>
+                            <h4>Need Help?</h4>
+                            <p>Our support team is available 24/7</p>
+                            <a href="contact.html" class="btn btn-outline"
+                                style="padding: 12px 25px; font-size: 12px;">Contact Support</a>
+                        </div>
+                        <div class="quick-action">
+                            <i class="fas fa-file-pdf"></i>
+                            <h4>Download POD</h4>
+                            <p>Get proof of delivery documents</p>
+                            <button class="btn btn-outline" style="padding: 12px 25px; font-size: 12px;">Download
+                                PDF</button>
+                        </div>
+                        <div class="quick-action">
+                            <i class="fas fa-bell"></i>
+                            <h4>Get Alerts</h4>
+                            <p>Receive SMS/Email notifications</p>
+                            <button class="btn btn-outline" style="padding: 12px 25px; font-size: 12px;">Enable
+                                Alerts</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tracking Help Section -->
+        <section class="security-section">
+            <div class="container">
+                <div class="security-grid">
+                    <div class="security-content reveal-left">
+                        <span class="section-tag">Insurance & Security</span>
+                        <h2 class="section-title">Safety at Every Milestone.</h2>
+                        <p style="margin-bottom: 30px; color: #555;">All high-value shipments, including
+                            pharmaceuticals, are automatically enrolled in our Premium Transit Insurance. We ensure that
+                            in case of any logistics disruption, your business interests remain protected.</p>
+                        <ul class="security-list">
+                            <li>
+                                <i class="fas fa-lock"></i>
+                                <div>
+                                    <strong>End-to-End Encryption</strong>
+                                    <p style="margin-top: 5px;">All tracking data is secured with military-grade
+                                        encryption.</p>
+                                </div>
+                            </li>
+                            <li>
+                                <i class="fas fa-shield-alt"></i>
+                                <div>
+                                    <strong>Multi-layer Security</strong>
+                                    <p style="margin-top: 5px;">Rigorous checks at every sorting hub ensure package
+                                        safety.</p>
+                                </div>
+                            </li>
+                            <li>
+                                <i class="fas fa-user-check"></i>
+                                <div>
+                                    <strong>Verified Handover</strong>
+                                    <p style="margin-top: 5px;">Biometric and digital ID confirmation for every
+                                        delivery.</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="security-image reveal-right">
+                        <img src="assets/images/fedex-flight.jpg" alt="Parcel Security">
+                        <div class="insurance-badge">
+                            <i class="fas fa-shield-alt"></i> PREMIUM INSURED
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+
+        <!-- Main Footer -->
+        <div class="footer-main">
+            <div class="container">
+                <div class="footer-grid">
+                    <!-- Brand Column -->
+                    <div class="footer-brand">
+                        <div class="footer-logo-wrap">
+                            <img src="assets/images/logo.png" alt="Bethel Express Logo" class="footer-logo-img">
+                            <div class="footer-logo-text">BETHEL<br><span>EXPRESS & IMPEX</span></div>
+                        </div>
+                        <p class="footer-desc">Your premium logistics partner specializing in international courier and
+                            wholesale pharmaceutical distribution. TNMSC Licensed & Globally Strategic.</p>
+                        <div class="footer-certs">
+                            <span class="cert-badge"><i class="fas fa-certificate"></i> TNMSC Licensed</span>
+                            <span class="cert-badge"><i class="fas fa-shield-alt"></i> ISO Certified</span>
+                        </div>
+                        <div class="footer-social">
+                            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                            <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                        </div>
+                    </div>
+
+                    <!-- Quick Links -->
+                    <div>
+                        <h4 class="footer-title">Quick Links</h4>
+                        <ul class="footer-links">
+                            <li><a href="index.html"><i class="fas fa-chevron-right"></i> Home</a></li>
+                            <li><a href="about.html"><i class="fas fa-chevron-right"></i> About Us</a></li>
+                            <li><a href="services.html"><i class="fas fa-chevron-right"></i> Our Services</a></li>
+                            <li><a href="tracking.html"><i class="fas fa-chevron-right"></i> Track Shipment</a></li>
+                            <li><a href="contact.html"><i class="fas fa-chevron-right"></i> Contact</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Services -->
+                    <div>
+                        <h4 class="footer-title">Services</h4>
+                        <ul class="footer-links">
+                            <li><a href="services.html"><i class="fas fa-chevron-right"></i> International Courier</a>
+                            </li>
+                            <li><a href="services.html"><i class="fas fa-chevron-right"></i> Pharma Distribution</a>
+                            </li>
+                            <li><a href="services.html"><i class="fas fa-chevron-right"></i> Custom Logistics</a></li>
+                            <li><a href="services.html"><i class="fas fa-chevron-right"></i> Express Delivery</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Contact Info -->
+                    <div>
+                        <h4 class="footer-title">Contact Us</h4>
+                        <div class="footer-contact-item">
+                            <div class="footer-contact-icon"><i class="fas fa-phone"></i></div>
+                            <div class="footer-contact-text">
+                                <strong>Phone</strong>
+                                <a href="tel:+919790749934">+91 97907 49934</a>
+                            </div>
+                        </div>
+                        <div class="footer-contact-item">
+                            <div class="footer-contact-icon"><i class="fas fa-envelope"></i></div>
+                            <div class="footer-contact-text">
+                                <strong>Email</strong>
+                                <a href="mailto:bethelexpress5@gmail.com">bethelexpress5@gmail.com</a>
+                            </div>
+                        </div>
+                        <div class="footer-contact-item">
+                            <div class="footer-contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+                            <div class="footer-contact-text">
+                                <strong>Address</strong>
+                                Nungambakkam, Chennai, India
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer Bottom -->
+                <div class="footer-bottom">
+                    <p>&copy; 2026 BETHEL EXPRESS & IMPEX. All rights reserved.</p>
+                    <div class="footer-bottom-links">
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms of Service</a>
+                        <a href="#">Cookie Policy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/script.js"></script>
+</body>
+
+</html>

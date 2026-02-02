@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | Bethel Express & Impex</title>
+    <meta name="description"
+        content="Get in touch with Bethel Express for international courier services, pharmaceutical distribution inquiries, or logistics consultation.">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Contact Page Specific Styles */
+
+        /* Contact Info Cards */
+        .contact-info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: -80px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .contact-info-card {
+            background: #fff;
+            padding: 50px 40px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-info-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-gold), var(--accent-gold));
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .contact-info-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(201, 162, 77, 0.05), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .contact-info-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.15);
+        }
+
+        .contact-info-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .contact-info-card:hover::after {
+            left: 100%;
+        }
+
+        .contact-info-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary-gold), var(--accent-gold));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: var(--primary-dark);
+            margin: 0 auto 30px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .contact-info-card:hover .contact-info-icon {
+            transform: scale(1.15) rotate(10deg);
+            box-shadow: 0 15px 40px rgba(201, 162, 77, 0.4);
+        }
+
+        .contact-info-card h4 {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #888;
+            margin-bottom: 15px;
+        }
+
+        .contact-info-card p {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .contact-info-card p a {
+            color: var(--primary-dark);
+            transition: color 0.3s ease;
+        }
+
+        .contact-info-card p a:hover {
+            color: var(--primary-gold);
+        }
+
+        /* Main Contact Section */
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 100px;
+        }
+
+        .contact-sidebar {
+            position: sticky;
+            top: 120px;
+        }
+
+        .hours-card {
+            background: var(--primary-dark);
+            color: #fff;
+            padding: 40px;
+            margin-top: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hours-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(201, 162, 77, 0.2) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .hours-card h4 {
+            color: var(--primary-gold);
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .hours-list li {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 14px;
+        }
+
+        .hours-list li:last-child {
+            border-bottom: none;
+        }
+
+        .hours-list li span:last-child {
+            color: var(--primary-gold);
+        }
+
+        /* Form Card */
+        .contact-form-card {
+            background: #fff;
+            padding: 60px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-form-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--primary-gold), var(--accent-gold));
+        }
+
+        .contact-form-card:hover {
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.12);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .contact-field {
+            margin-bottom: 35px;
+            position: relative;
+        }
+
+        .contact-field label {
+            display: block;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .contact-field:focus-within label {
+            color: var(--primary-gold);
+        }
+
+        .contact-input {
+            width: 100%;
+            padding: 18px 0;
+            border: none;
+            border-bottom: 2px solid #eee;
+            font-family: inherit;
+            font-size: 16px;
+            transition: all 0.4s ease;
+            background: transparent;
+        }
+
+        .contact-input:focus {
+            outline: none;
+            border-color: var(--primary-gold);
+        }
+
+        .contact-input::placeholder {
+            color: #bbb;
+        }
+
+        .contact-select {
+            width: 100%;
+            padding: 18px 0;
+            border: none;
+            border-bottom: 2px solid #eee;
+            font-family: inherit;
+            font-size: 16px;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+
+        .contact-select:focus {
+            outline: none;
+            border-color: var(--primary-gold);
+        }
+
+        textarea.contact-input {
+            resize: none;
+            height: 150px;
+        }
+
+        /* Map Section */
+        .map-section {
+            background: var(--primary-dark);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .map-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c9a24d' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .map-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .map-image {
+            position: relative;
+        }
+
+        .map-image img {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.6s ease;
+        }
+
+        .map-image:hover img {
+            transform: scale(1.02);
+        }
+
+        .map-pin {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: bounce 2s infinite;
+        }
+
+        .map-pin i {
+            font-size: 60px;
+            color: var(--primary-gold);
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3));
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translate(-50%, -50%) translateY(0);
+            }
+
+            50% {
+                transform: translate(-50%, -50%) translateY(-15px);
+            }
+        }
+
+        .location-list {
+            margin-top: 40px;
+        }
+
+        .location-item {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s ease;
+        }
+
+        .location-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateX(10px);
+            border-color: var(--primary-gold);
+        }
+
+        .location-item i {
+            font-size: 24px;
+            color: var(--primary-gold);
+            flex-shrink: 0;
+        }
+
+        .location-item h4 {
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .location-item p {
+            font-size: 14px;
+            color: var(--text-grey);
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            background: var(--bg-light);
+        }
+
+        .faq-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 80px;
+            align-items: start;
+        }
+
+        .faq-item {
+            background: #fff;
+            margin-bottom: 20px;
+            padding: 30px 35px;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            border-radius: 4px;
+        }
+
+        .faq-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--primary-gold), var(--accent-gold));
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item:hover::before,
+        .faq-item.active::before {
+            transform: scaleY(1);
+        }
+
+        .faq-item:hover {
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.08);
+            transform: translateX(10px);
+        }
+
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .faq-question i {
+            color: var(--primary-gold);
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 200px;
+            padding-top: 20px;
+        }
+
+        .faq-answer p {
+            color: #666;
+            font-size: 15px;
+            line-height: 1.8;
+        }
+
+        /* Social Connect */
+        .social-connect {
+            display: flex;
+            gap: 15px;
+            margin-top: 40px;
+        }
+
+        .social-btn {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #eee;
+            font-size: 20px;
+            color: #888;
+            transition: all 0.4s ease;
+        }
+
+        .social-btn:hover {
+            background: var(--primary-gold);
+            border-color: var(--primary-gold);
+            color: var(--primary-dark);
+            transform: translateY(-5px) rotate(5deg);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .contact-info-grid {
+                grid-template-columns: 1fr;
+                margin-top: 0;
+                padding-top: 60px;
+            }
+
+            .contact-container {
+                grid-template-columns: 1fr;
+                gap: 60px;
+            }
+
+            .contact-sidebar {
+                position: static;
+            }
+
+            .map-content {
+                grid-template-columns: 1fr;
+            }
+
+            .faq-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-form-card {
+                padding: 40px 30px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Particle Background -->
+    <div id="particles" class="particle-bg"></div>
+
+    <!-- SPLASH SCREEN -->
+    <div id="splash">
+        <div class="route">
+            <span class="parcel"></span>
+        </div>
+        <div class="logo-splash">
+            <h1>BETHEL EXPRESS & IMPEX</h1>
+            <p>Connecting the World, Delivering Excellence</p>
+        </div>
+    </div>
+
+    <header class="scrolled">
+        <div class="container nav-flex">
+            <a href="index.html" class="logo">
+                <img src="assets/images/logo.png" alt="Bethel Express Logo" class="logo-img">
+                <div class="logo-text">
+                    <span class="brand-name">Bethel Express</span>
+                    <span class="brand-tagline">& Impex</span>
+                </div>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="about.html" class="nav-link">About Us</a></li>
+                <li><a href="services.html" class="nav-link">Our Services</a></li>
+                <li><a href="tracking.html" class="nav-link">Track Shipment</a></li>
+                <li><a href="contact.html" class="nav-link active">Contact</a></li>
+            </ul>
+            <a href="contact.html" class="btn btn-primary">Request Quote</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Banner -->
+        <div class="page-banner" style="background-image: url('assets/images/courier-desk.jpg'); height: 50vh;">
+            <div class="container banner-content">
+                <span class="section-tag" style="color: var(--primary-gold);">Let's Connect</span>
+                <h1 style="font-size: 60px;">We'd Love to<br><span class="gradient-text">Hear From You.</span></h1>
+            </div>
+            <div class="scroll-indicator">
+                <span></span>
+            </div>
+        </div>
+
+        <!-- Contact Info Cards -->
+        <section style="padding-top: 0;">
+            <div class="container">
+                <div class="contact-info-grid">
+                    <div class="contact-info-card reveal stagger-1">
+                        <div class="contact-info-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <h4>Call Us</h4>
+                        <p><a href="tel:+919790749934">+91 97907 49934</a></p>
+                    </div>
+                    <div class="contact-info-card reveal stagger-2">
+                        <div class="contact-info-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <h4>Email Us</h4>
+                        <p><a href="mailto:bethelexpress5@gmail.com">bethelexpress5@gmail.com</a></p>
+                    </div>
+                    <div class="contact-info-card reveal stagger-3">
+                        <div class="contact-info-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <h4>Visit Us</h4>
+                        <p>Nungambakkam, Chennai</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Contact Area -->
+        <section>
+            <div class="container">
+                <div class="contact-container">
+                    <div class="contact-sidebar reveal-left">
+                        <span class="section-tag">Get a Quote</span>
+                        <h2 class="section-title">Let's Discuss<br>Your Logistics.</h2>
+                        <p style="color: #666; margin-bottom: 30px;">Whether you're a business looking for bulk courier
+                            solutions or an individual making a one-time shipment, we have tailored services for
+                            everyone.</p>
+
+                        <div class="social-connect">
+                            <a href="#" class="social-btn"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="social-btn"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#" class="social-btn"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="social-btn"><i class="fab fa-whatsapp"></i></a>
+                        </div>
+
+                        <div class="hours-card">
+                            <h4><i class="fas fa-clock"></i> Operating Hours</h4>
+                            <ul class="hours-list">
+                                <li><span>Monday – Friday</span> <span>9:00 AM – 8:00 PM</span></li>
+                                <li><span>Saturday</span> <span>10:00 AM – 6:00 PM</span></li>
+                                <li><span>Sunday</span> <span>Closed</span></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Request Quote Form -->
+                    <div class="contact-form-card reveal-right">
+                        <form id="contactForm">
+                            <div class="form-row">
+                                <div class="contact-field">
+                                    <label for="fullName">Full Name *</label>
+                                    <input type="text" id="fullName" class="contact-input" placeholder="John Doe"
+                                        required>
+                                </div>
+                                <div class="contact-field">
+                                    <label for="email">Email Address *</label>
+                                    <input type="email" id="email" class="contact-input" placeholder="john@company.com"
+                                        required>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="contact-field">
+                                    <label for="company">Company / Organization</label>
+                                    <input type="text" id="company" class="contact-input" placeholder="Your Company">
+                                </div>
+                                <div class="contact-field">
+                                    <label for="phone">Phone Number *</label>
+                                    <input type="tel" id="phone" class="contact-input" placeholder="+91 98765 43210"
+                                        required>
+                                </div>
+                            </div>
+
+                            <div class="contact-field">
+                                <label for="service">Service of Interest *</label>
+                                <select id="service" class="contact-select" required>
+                                    <option value="" disabled selected>Select a Service</option>
+                                    <option value="courier">International Courier</option>
+                                    <option value="pharma">Pharmaceutical Distribution</option>
+                                    <option value="custom">Custom Logistics</option>
+                                    <option value="bulk">Bulk Cargo</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+
+                            <div class="contact-field">
+                                <label for="message">Your Message</label>
+                                <textarea id="message" class="contact-input"
+                                    placeholder="Tell us about your logistics requirements..."></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">
+                                <i class="fas fa-paper-plane" style="margin-right: 10px;"></i> SUBMIT REQUEST
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Map & Locations Section -->
+        <section class="map-section" style="color: #fff;">
+            <div class="container">
+                <div class="map-content">
+                    <div class="map-image reveal-left">
+                        <img src="assets/images/3d-world-map.png" alt="Our Location">
+                        <div class="map-pin">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                    </div>
+                    <div class="reveal-right">
+                        <span class="section-tag" style="color: var(--primary-gold);">Our Presence</span>
+                        <h2 class="section-title">Strategic Locations<br><span class="gradient-text">Worldwide.</span>
+                        </h2>
+                        <p style="color: var(--text-grey);">We operate from key logistics hubs ensuring your shipments
+                            have the shortest possible transit times.</p>
+
+                        <div class="location-list">
+                            <div class="location-item">
+                                <i class="fas fa-building"></i>
+                                <div>
+                                    <h4>Corporate Headquarters</h4>
+                                    <p>Nungambakkam, Chennai, Tamil Nadu, India</p>
+                                </div>
+                            </div>
+                            <div class="location-item">
+                                <i class="fas fa-warehouse"></i>
+                                <div>
+                                    <h4>Distribution Center</h4>
+                                    <p>Mumbai Gateway, Maharashtra, India</p>
+                                </div>
+                            </div>
+                            <div class="location-item">
+                                <i class="fas fa-globe-asia"></i>
+                                <div>
+                                    <h4>International Hub</h4>
+                                    <p>Dubai Logistics Corridor, UAE</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="faq-section">
+            <div class="container">
+                <div class="faq-grid">
+                    <div class="reveal-left">
+                        <span class="section-tag">Support</span>
+                        <h2 class="section-title">Frequently<br>Asked Questions.</h2>
+                        <p style="color: #666;">Can't find what you're looking for? Our support team is always ready to
+                            help.</p>
+                        <a href="tel:+919790749934" class="btn btn-primary" style="margin-top: 30px;">
+                            <i class="fas fa-headset" style="margin-right: 10px;"></i> Call Support
+                        </a>
+                    </div>
+                    <div class="reveal-right">
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <span>How can I track my international shipment?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>You can track any shipment using the tracking ID provided at the time of booking.
+                                    Simply visit our Tracking page, enter your unique Bethel Tracking ID, and get
+                                    real-time updates on your parcel's location and status.</p>
+                            </div>
+                        </div>
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <span>What are your delivery timeframes for the USA?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Delivery to the USA typically takes 3-5 business days for Express shipments and 7-10
+                                    business days for Economy shipments. Actual times may vary based on customs
+                                    clearance and destination city.</p>
+                            </div>
+                        </div>
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <span>Do you handle pharmaceutical shipments?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Yes! Bethel Express & Impex is a TNMSC licensed agency specializing in pharmaceutical
+                                    wholesale distribution. We maintain cold chain integrity and comply with all
+                                    regulatory requirements for medicine transport.</p>
+                            </div>
+                        </div>
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <span>What payment methods do you accept?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>We accept bank transfers, credit/debit cards, UPI payments, and corporate accounts
+                                    for regular customers. Custom billing arrangements can be made for enterprise
+                                    clients.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <!-- Main Footer -->
+        <div class="footer-main">
+            <div class="container">
+                <div class="footer-grid">
+                    <!-- Brand Column -->
+                    <div class="footer-brand">
+                        <div class="footer-logo-wrap">
+                            <img src="assets/images/logo.png" alt="Bethel Express Logo" class="footer-logo-img">
+                            <div class="footer-logo-text">BETHEL<br><span>EXPRESS & IMPEX</span></div>
+                        </div>
+                        <p class="footer-desc">Your premium logistics partner specializing in international courier and
+                            wholesale pharmaceutical distribution. TNMSC Licensed & Globally Strategic.</p>
+                        <div class="footer-certs">
+                            <span class="cert-badge"><i class="fas fa-certificate"></i> TNMSC Licensed</span>
+                            <span class="cert-badge"><i class="fas fa-shield-alt"></i> ISO Certified</span>
+                        </div>
+                        <div class="footer-social">
+                            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                            <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                        </div>
+                    </div>
+
+                    <!-- Quick Links -->
+                    <div>
+                        <h4 class="footer-title">Quick Links</h4>
+                        <ul class="footer-links">
+                            <li><a href="index.html"><i class="fas fa-chevron-right"></i> Home</a></li>
+                            <li><a href="about.html"><i class="fas fa-chevron-right"></i> About Us</a></li>
+                            <li><a href="services.html"><i class="fas fa-chevron-right"></i> Our Services</a></li>
+                            <li><a href="tracking.html"><i class="fas fa-chevron-right"></i> Track Shipment</a></li>
+                            <li><a href="contact.html"><i class="fas fa-chevron-right"></i> Contact</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Services -->
+                    <div>
+                        <h4 class="footer-title">Services</h4>
+                        <ul class="footer-links">
+                            <li><a href="services.html"><i class="fas fa-chevron-right"></i> International Courier</a>
+                            </li>
+                            <li><a href="services.html"><i class="fas fa-chevron-right"></i> Pharma Distribution</a>
+                            </li>
+                            <li><a href="services.html"><i class="fas fa-chevron-right"></i> Custom Logistics</a></li>
+                            <li><a href="services.html"><i class="fas fa-chevron-right"></i> Express Delivery</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Contact Info -->
+                    <div>
+                        <h4 class="footer-title">Contact Us</h4>
+                        <div class="footer-contact-item">
+                            <div class="footer-contact-icon"><i class="fas fa-phone"></i></div>
+                            <div class="footer-contact-text">
+                                <strong>Phone</strong>
+                                <a href="tel:+919790749934">+91 97907 49934</a>
+                            </div>
+                        </div>
+                        <div class="footer-contact-item">
+                            <div class="footer-contact-icon"><i class="fas fa-envelope"></i></div>
+                            <div class="footer-contact-text">
+                                <strong>Email</strong>
+                                <a href="mailto:bethelexpress5@gmail.com">bethelexpress5@gmail.com</a>
+                            </div>
+                        </div>
+                        <div class="footer-contact-item">
+                            <div class="footer-contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+                            <div class="footer-contact-text">
+                                <strong>Address</strong>
+                                Nungambakkam, Chennai, India
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer Bottom -->
+                <div class="footer-bottom">
+                    <p>&copy; 2026 BETHEL EXPRESS & IMPEX. All rights reserved.</p>
+                    <div class="footer-bottom-links">
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms of Service</a>
+                        <a href="#">Cookie Policy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/script.js"></script>
+</body>
+
+</html>

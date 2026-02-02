@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bethel Express & Impex | Global Logistics & Pharma Distribution</title>
+    <meta name="description"
+        content="Premium international courier services and TNMSC licensed pharmaceutical wholesale distribution. Connecting India to the world since 2014.">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Homepage Specific Enhancements */
+        .hero-home {
+            position: relative;
+        }
+
+        .hero-home::before {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.3) 50%, transparent 100%);
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(201, 162, 77, 0.2);
+            border: 1px solid var(--primary-gold);
+            padding: 10px 20px;
+            font-size: 13px;
+            color: var(--primary-gold);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.8s ease 0.2s forwards;
+            opacity: 0;
+        }
+
+        .hero-badge i {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Quick Track Card */
+        .quick-track-card {
+            background: #fff;
+            padding: 50px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.15);
+            border-left: 6px solid var(--primary-gold);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .quick-track-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(201, 162, 77, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .quick-track-card:hover {
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Partner Cards */
+        .partner-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+        }
+
+        .partner-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .partner-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(201, 162, 77, 0.1), transparent);
+            transition: left 0.6s ease;
+            z-index: 1;
+        }
+
+        .partner-card:hover::before {
+            left: 100%;
+        }
+
+        .partner-badge {
+            color: var(--primary-gold);
+            font-size: 14px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .partner-card img {
+            height: 200px;
+            object-fit: cover;
+            margin-bottom: 25px;
+        }
+
+        /* Pharma Section */
+        .pharma-section {
+            position: relative;
+        }
+
+        .pharma-image-wrap {
+            position: relative;
+        }
+
+        .pharma-image-wrap img {
+            box-shadow: -30px 30px 0 var(--primary-dark);
+            transition: all 0.4s ease;
+        }
+
+        .pharma-image-wrap:hover img {
+            transform: scale(1.02);
+        }
+
+        .tnmsc-badge {
+            position: absolute;
+            bottom: -40px;
+            right: -40px;
+            background: linear-gradient(135deg, var(--primary-gold), var(--accent-gold));
+            padding: 40px;
+            width: 200px;
+            text-align: center;
+            animation: floatBadge 3s ease-in-out infinite;
+        }
+
+        @keyframes floatBadge {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .tnmsc-badge h2 {
+            font-size: 40px;
+            color: var(--primary-dark);
+            line-height: 1;
+        }
+
+        .tnmsc-badge p {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--primary-dark);
+        }
+
+        .check-list li {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            align-items: center;
+        }
+
+        .check-list li i {
+            color: var(--primary-gold);
+            flex-shrink: 0;
+        }
+
+        /* Global Map Section */
+        .map-section {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .map-section img {
+            opacity: 0.9;
+            transform: scale(1.1);
+            transition: transform 10s ease;
+        }
+
+        .map-section:hover img {
+            transform: scale(1.15);
+        }
+
+        .hub-card {
+            position: absolute;
+            top: 10%;
+            right: 10%;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            animation: slideInRight 0.8s ease forwards;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Industry Cards */
+        .industry-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        /* CTA Section */
+        .cta-gold {
+            background: linear-gradient(135deg, var(--primary-gold), var(--accent-gold));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-gold::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+            animation: rotateCTA 15s linear infinite;
+        }
+
+        @keyframes rotateCTA {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cta-content h2 {
+            font-size: 40px;
+            color: var(--primary-dark);
+            margin-bottom: 20px;
+        }
+
+        .cta-content p {
+            color: var(--primary-dark);
+            opacity: 0.8;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .partner-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .industry-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .cta-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 30px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .quick-track-card>div:first-child {
+                grid-template-columns: 1fr;
+            }
+
+            .industry-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pharma-grid {
+                grid-template-columns: 1fr !important;
+            }
+
+            .calc-grid {
+                grid-template-columns: 1fr !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Particle Background -->
+    <div id="particles" class="particle-bg"></div>
+
+    <!-- SPLASH SCREEN -->
+    <div id="splash">
+        <div class="route">
+            <span class="parcel"></span>
+        </div>
+        <div class="logo-splash">
+            <h1>BETHEL EXPRESS & IMPEX</h1>
+            <p>Connecting the World, Delivering Excellence</p>
+        </div>
+    </div>
+
+    <header>
+        <div class="container nav-flex">
+            <a href="index.html" class="logo">
+                <img src="assets/images/logo.png" alt="Bethel Express Logo" class="logo-img">
+                <div class="logo-text">
+                    <span class="brand-name">Bethel Express</span>
+                    <span class="brand-tagline">& Impex</span>
+                </div>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link active">Home</a></li>
+                <li><a href="about.html" class="nav-link">About Us</a></li>
+                <li><a href="services.html" class="nav-link">Our Services</a></li>
+                <li><a href="tracking.html" class="nav-link">Track Shipment</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+            <a href="contact.html" class="btn btn-primary">Request Quote</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero-home" style="background-image: url('assets/images/port-sunset.jpg');">
+            <div class="container">
+                <div class="hero-content">
+                    <div class="hero-badge">
+                        <i class="fas fa-globe-asia"></i>
+                        <span>Premium Worldwide Courier</span>
+                    </div>
+                    <h1>Connecting Borders.<br><span class="gradient-text">Elevating Standards.</span></h1>
+                    <p
+                        style="font-size: 20px; margin-bottom: 40px; color: rgba(255,255,255,0.95); font-weight: 300; letter-spacing: 0.5px; animation: fadeInUp 0.8s ease 0.6s forwards; opacity: 0;">
+                        International Courier • Custom Logistics • TNMSC Licensed Pharmaceutical Distribution
+                    </p>
+                    <div style="display: flex; gap: 20px; animation: fadeInUp 0.8s ease 0.8s forwards; opacity: 0;">
+                        <a href="tracking.html" class="btn btn-primary">
+                            <i class="fas fa-search" style="margin-right: 10px;"></i> Track Your Parcel
+                        </a>
+                        <a href="services.html" class="btn btn-outline" style="color: #fff; border-color: #fff;">
+                            Our Core Offerings
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="scroll-indicator">
+                <span></span>
+            </div>
+        </section>
+
+        <!-- Dynamic Tracking Bar -->
+        <div class="container" style="position: relative; z-index: 5; margin-top: -80px;">
+            <div class="quick-track-card reveal">
+                <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 40px; align-items: center;">
+                    <div>
+                        <h3 style="font-size: 24px; margin-bottom: 5px;">
+                            <i class="fas fa-shipping-fast" style="color: var(--primary-gold); margin-right: 10px;"></i>
+                            Quick Track
+                        </h3>
+                        <p style="color: #888; font-size: 14px;">Instant real-time shipment updates</p>
+                    </div>
+                    <div class="track-input-wrap">
+                        <input type="text" placeholder="Enter Reference / Tracking Number" class="track-input"
+                            id="trackNum" style="background: transparent; flex: 1; border: none; padding: 20px;">
+                        <button class="btn btn-primary" id="searchBtn" style="padding: 15px 40px;">
+                            <i class="fas fa-search" style="margin-right: 8px;"></i> TRACK
+                        </button>
+                    </div>
+                </div>
+                <!-- Mini Result Overlay -->
+                <div id="resWrap"
+                    style="display: none; margin-top: 30px; padding-top: 30px; border-top: 1px solid #eee;">
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;">
+                        <div>
+                            <small style="color: #aaa; text-transform: uppercase;">Tracking ID</small>
+                            <p><strong id="resId" style="color: var(--primary-gold);"></strong></p>
+                        </div>
+                        <div>
+                            <small style="color: #aaa; text-transform: uppercase;">Current Status</small>
+                            <p><span style="color: #2e7d32; font-weight: 700;">● In Transit</span></p>
+                        </div>
+                        <div>
+                            <small style="color: #aaa; text-transform: uppercase;">Location</small>
+                            <p><strong>International Sorting Facility</strong></p>
+                        </div>
+                        <div>
+                            <small style="color: #aaa; text-transform: uppercase;">ETA</small>
+                            <p><strong>Feb 05, 2026</strong></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Partnership Alliance Section -->
+        <section style="background: var(--bg-light);">
+            <div class="container">
+                <div style="text-align: center; margin-bottom: 80px;" class="reveal">
+                    <span class="section-tag">Our Global Alliance</span>
+                    <h2 class="section-title">Powered by Industry Leaders.</h2>
+                    <p style="max-width: 700px; margin: 0 auto; color: #666;">We integrate our logistics engine with the
+                        world's most trusted courier networks to guarantee speed, safety, and reach.</p>
+                </div>
+                <div class="partner-grid">
+                    <div class="partner-card reveal stagger-1">
+                        <img src="assets/images/dhl-transit.jpg" alt="DHL Partnership" style="width: 100%;">
+                        <span class="partner-badge">Gold Partner</span>
+                        <h3>DHL Integration</h3>
+                        <p style="color: #777; font-size: 15px; margin-top: 15px;">Leveraging DHL's massive air and
+                            ground network for time-sensitive global deliveries with 24/7 visibility.</p>
+                    </div>
+                    <div class="partner-card reveal stagger-2">
+                        <img src="assets/images/fedex-flight.jpg" alt="FedEx Partnership" style="width: 100%;">
+                        <span class="partner-badge">Elite Partner</span>
+                        <h3>FedEx Express</h3>
+                        <p style="color: #777; font-size: 15px; margin-top: 15px;">Direct access to FedEx's premium
+                            international priority services, ensuring customs clearance expertise and rapid transit.</p>
+                    </div>
+                    <div class="partner-card reveal stagger-3">
+                        <img src="assets/images/cargo-truck.jpg" alt="UPS Partnership" style="width: 100%;">
+                        <span class="partner-badge">Global Partner</span>
+                        <h3>UPS Distribution</h3>
+                        <p style="color: #777; font-size: 15px; margin-top: 15px;">Utilizing UPS's robust logistics
+                            infrastructure for reliable bulk shipping and complex supply chain requirements across
+                            continents.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pharma Excellence Section -->
+        <section class="pharma-section">
+            <div class="container">
+                <div class="pharma-grid"
+                    style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 100px; align-items: center;">
+                    <div class="pharma-image-wrap reveal-left">
+                        <img src="assets/images/pharma-logistics.jpg" alt="Pharma Distribution">
+                        <div class="tnmsc-badge">
+                            <h2>TNMSC</h2>
+                            <p>Licensed Agency</p>
+                        </div>
+                    </div>
+                    <div class="reveal-right">
+                        <span class="section-tag">Specialized Logistics</span>
+                        <h2 class="section-title">Critical Care.<br><span class="gradient-text">Absolute
+                                Compliance.</span></h2>
+                        <p style="margin-bottom: 25px; color: #555;">Bethel Express & Impex is a certified wholesale
+                            supplier for quality medicines. Our TNMSC license reflects our commitment to the highest
+                            standards of pharmaceutical distribution.</p>
+                        <ul class="check-list" style="margin-bottom: 40px;">
+                            <li><i class="fas fa-check-circle"></i> <span>Temperature Controlled Supply Chain</span>
+                            </li>
+                            <li><i class="fas fa-check-circle"></i> <span>Regulatory Documentation Support</span></li>
+                            <li><i class="fas fa-check-circle"></i> <span>Wholesale Medical Distribution</span></li>
+                            <li><i class="fas fa-check-circle"></i> <span>24/7 Cold Chain Monitoring</span></li>
+                        </ul>
+                        <a href="services.html" class="btn btn-primary">
+                            <i class="fas fa-arrow-right" style="margin-right: 10px;"></i> Learn More
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Calculate Your Cost Section -->
+        <section style="background: var(--bg-light);">
+            <div class="container">
+                <div style="text-align: center; margin-bottom: 60px;" class="reveal">
+                    <span class="section-tag">Shipping Estimator</span>
+                    <h2 class="section-title">Calculate Your Cost.</h2>
+                    <p style="color: #666;">Get an instant estimate for your international courier and cargo shipments.
+                    </p>
+                </div>
+
+                <div class="calc-grid" id="calcForm">
+                    <div style="background: #fff; padding: 50px; box-shadow: var(--shadow-soft);"
+                        class="reveal stagger-1">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
+                            <div class="calc-input-group">
+                                <label>Height (cm)</label>
+                                <input type="number" id="calcH" class="calc-field" placeholder="0">
+                            </div>
+                            <div class="calc-input-group">
+                                <label>Width (cm)</label>
+                                <input type="number" id="calcW" class="calc-field" placeholder="0">
+                            </div>
+                            <div class="calc-input-group">
+                                <label>Depth (cm)</label>
+                                <input type="number" id="calcD" class="calc-field" placeholder="0">
+                            </div>
+                        </div>
+
+                        <div class="calc-input-group">
+                            <label>Weight (kg)</label>
+                            <input type="number" id="calcWeight" class="calc-field" placeholder="Enter Weight">
+                        </div>
+
+                        <div class="calc-input-group">
+                            <label>Courier</label>
+                            <select id="calcCourier" class="calc-select">
+                                <option value="standard">Select Courier</option>
+                                <option value="dhl">DHL Express</option>
+                                <option value="fedex">FedEx Priority</option>
+                                <option value="ups">UPS Worldwide</option>
+                            </select>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div class="calc-input-group">
+                                <label>From Location</label>
+                                <input type="text" class="calc-field" value="Chennai" readonly
+                                    style="background: #f9f9f9; cursor: not-allowed;">
+                            </div>
+                            <div class="calc-input-group">
+                                <label>Destination</label>
+                                <select id="calcDest" class="calc-select">
+                                    <option value="domestic">Select Destination</option>
+                                    <option value="usa">USA</option>
+                                    <option value="uk">United Kingdom</option>
+                                    <option value="uae">United Arab Emirates</option>
+                                    <option value="singapore">Singapore</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="calc-input-group" style="margin-bottom: 0;">
+                            <label>Package Type</label>
+                            <select id="calcPkg" class="calc-select">
+                                <option value="parcel">Select Document Type</option>
+                                <option value="document">Commercial Documents</option>
+                                <option value="parcel">General Parcel</option>
+                                <option value="pharma">Pharmaceutical Batch</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="calc-result-box reveal stagger-2">
+                        <span class="section-tag" style="color: #fff; opacity: 0.6;">Estimated Total</span>
+                        <h4 style="margin: 20px 0 10px; position: relative; z-index: 1;">Total Cost:</h4>
+                        <h2>Rs. <span id="totalCost">0</span></h2>
+                        <p
+                            style="font-size: 13px; color: var(--text-grey); margin-top: 30px; position: relative; z-index: 1;">
+                            *Rates are indicative based on standard weight/volumetric weight. Final charges may vary
+                            after pickup and inspection.
+                        </p>
+                        <a href="contact.html" class="btn btn-primary" style="margin-top: 40px;">
+                            <i class="fas fa-paper-plane" style="margin-right: 10px;"></i> Propose Booking
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Global Map Section -->
+        <section class="map-section" style="background: var(--primary-dark); color: #fff; overflow: hidden;">
+            <div class="container">
+                <div style="text-align: center; margin-bottom: 100px;" class="reveal">
+                    <span class="section-tag" style="color: var(--primary-gold);">Global Presence</span>
+                    <h2 class="section-title" style="color: #fff;">Our Footprint Across 200+ Nations.</h2>
+                </div>
+                <div style="position: relative;">
+                    <img src="assets/images/3d-world-map.png" alt="Global Operations Map">
+                    <div class="hub-card">
+                        <h3><i class="fas fa-map-marker-alt"
+                                style="color: var(--primary-gold); margin-right: 10px;"></i> Direct Export Hubs</h3>
+                        <p style="color: var(--text-grey); font-size: 14px; margin-top: 15px;">
+                            Dubai • Singapore • London • New York • Chennai (HQ)
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Industries Served Grid -->
+        <section>
+            <div class="container">
+                <div style="text-align: center; margin-bottom: 80px;" class="reveal">
+                    <span class="section-tag">Serving Excellence</span>
+                    <h2 class="section-title">Industries We Empower.</h2>
+                </div>
+                <div class="industry-grid">
+                    <div class="industry-card reveal stagger-1">
+                        <img src="assets/images/smart-logistics.jpg" alt="Technology Sector">
+                        <div class="industry-card-content">
+                            <h4 style="color: #fff;">Technology</h4>
+                            <p style="color: var(--primary-gold); font-size: 12px; text-transform: uppercase;">Hardware
+                                & IT Solutions</p>
+                        </div>
+                    </div>
+                    <div class="industry-card reveal stagger-2">
+                        <img src="assets/images/pharma-logistics.jpg" alt="Healthcare Sector">
+                        <div class="industry-card-content">
+                            <h4 style="color: #fff;">Healthcare</h4>
+                            <p style="color: var(--primary-gold); font-size: 12px; text-transform: uppercase;">
+                                Pharmaceuticals & Lab</p>
+                        </div>
+                    </div>
+                    <div class="industry-card reveal stagger-3">
+                        <img src="assets/images/courier-desk.jpg" alt="E-commerce Sector">
+                        <div class="industry-card-content">
+                            <h4 style="color: #fff;">E-Commerce</h4>
+                            <p style="color: var(--primary-gold); font-size: 12px; text-transform: uppercase;">Direct to
+                                Consumer</p>
+                        </div>
+                    </div>
+                    <div class="industry-card reveal stagger-4">
+                        <img src="assets/images/warehouse-deep.jpg" alt="Manufacturing">
+                        <div class="industry-card-content">
+                            <h4 style="color: #fff;">Industrial</h4>
+                            <p style="color: var(--primary-gold); font-size: 12px; text-transform: uppercase;">Heavy
+                                Parts & Spares</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final CTA -->
+        <section class="cta-gold">
+            <div class="container cta-content">
+                <div style="max-width: 600px;">
+                    <h2>Ready for World-Class Service?</h2>
+                    <p>Get in touch with our logistics consultants for a custom quote tailored to your business scale.
+                    </p>
+                </div>
+                <a href="contact.html" class="btn"
+                    style="background: var(--primary-dark); color: var(--primary-gold); padding: 20px 50px;">
+                    <i class="fas fa-arrow-right" style="margin-right: 10px;"></i> GET A QUOTE NOW
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+
+        <!-- Main Footer -->
+        <div class="footer-main">
+            <div class="container">
+                <div class="footer-grid">
+                    <!-- Brand Column -->
+                    <div class="footer-brand">
+                        <div class="footer-logo-wrap">
+                            <img src="assets/images/logo.png" alt="Bethel Express Logo" class="footer-logo-img">
+                            <div class="footer-logo-text">BETHEL<br><span>EXPRESS & IMPEX</span></div>
+                        </div>
+                        <p class="footer-desc">Your premium logistics partner specializing in international courier and
+                            wholesale pharmaceutical distribution. TNMSC Licensed & Globally Strategic.</p>
+                        <div class="footer-certs">
+                            <span class="cert-badge"><i class="fas fa-certificate"></i> TNMSC Licensed</span>
+                            <span class="cert-badge"><i class="fas fa-shield-alt"></i> ISO Certified</span>
+                        </div>
+                        <div class="footer-social">
+                            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                            <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                        </div>
+                    </div>
+
+                    <!-- Quick Links -->
+                    <div>
+                        <h4 class="footer-title">Quick Links</h4>
+                        <ul class="footer-links">
+                            <li><a href="index.html"><i class="fas fa-chevron-right"></i> Home</a></li>
+                            <li><a href="about.html"><i class="fas fa-chevron-right"></i> About Us</a></li>
+                            <li><a href="services.html"><i class="fas fa-chevron-right"></i> Our Services</a></li>
+                            <li><a href="tracking.html"><i class="fas fa-chevron-right"></i> Track Shipment</a></li>
+                            <li><a href="contact.html"><i class="fas fa-chevron-right"></i> Contact</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Services -->
+                    <div>
+                        <h4 class="footer-title">Services</h4>
+                        <ul class="footer-links">
+                            <li><a href="services.html"><i class="fas fa-chevron-right"></i> International Courier</a>
+                            </li>
+                            <li><a href="services.html"><i class="fas fa-chevron-right"></i> Pharma Distribution</a>
+                            </li>
+                            <li><a href="services.html"><i class="fas fa-chevron-right"></i> Custom Logistics</a></li>
+                            <li><a href="services.html"><i class="fas fa-chevron-right"></i> Express Delivery</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Contact Info -->
+                    <div>
+                        <h4 class="footer-title">Contact Us</h4>
+                        <div class="footer-contact-item">
+                            <div class="footer-contact-icon"><i class="fas fa-phone"></i></div>
+                            <div class="footer-contact-text">
+                                <strong>Phone</strong>
+                                <a href="tel:+919790749934">+91 97907 49934</a>
+                            </div>
+                        </div>
+                        <div class="footer-contact-item">
+                            <div class="footer-contact-icon"><i class="fas fa-envelope"></i></div>
+                            <div class="footer-contact-text">
+                                <strong>Email</strong>
+                                <a href="mailto:bethelexpress5@gmail.com">bethelexpress5@gmail.com</a>
+                            </div>
+                        </div>
+                        <div class="footer-contact-item">
+                            <div class="footer-contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+                            <div class="footer-contact-text">
+                                <strong>Address</strong>
+                                Nungambakkam, Chennai, India
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer Bottom -->
+                <div class="footer-bottom">
+                    <p>&copy; 2026 BETHEL EXPRESS & IMPEX. All rights reserved.</p>
+                    <div class="footer-bottom-links">
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms of Service</a>
+                        <a href="#">Cookie Policy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/script.js"></script>
+</body>
+
+</html>
