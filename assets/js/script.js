@@ -69,57 +69,110 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleTracking(e) {
         e.preventDefault();
         const trackInput = document.getElementById('trackNum');
-        const val = trackInput.value.trim();
+        const errorBox = document.getElementById('trackError');
+        const errorMsg = document.getElementById('trackErrorMsg');
 
-        if (!val) {
-            showNotification('Please enter a tracking number', 'error');
-            trackInput.focus();
+        const trackingNumber = trackInput.value.trim();
+
+        // 1. Reset Styles
+        if (errorBox) errorBox.style.display = 'none';
+        trackInput.style.borderColor = '';
+
+        // 2. Validate Input
+        if (!trackingNumber) {
+            showTrackError('Please enter a tracking number.');
             return;
         }
 
-        const btn = document.getElementById('searchBtn');
-        const originalText = btn.innerText;
+        // 3. Auto-Detect Courier
+        const courier = detectCourier(trackingNumber);
 
-        // Add loading animation
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> SEARCHING...';
+        const btn = document.getElementById('searchBtn');
+        const originalText = btn.innerHTML;
+
+        // 4. UI Feedback
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> OPENING...';
         btn.disabled = true;
 
+        // 5. Construct URL
+        let url = '';
+        const encodedId = encodeURIComponent(trackingNumber);
+
+        if (courier === 'dhl') {
+            url = `https://mydhl.express.dhl/in/en/tracking.html#/results?id=${encodedId}`;
+        } else if (courier === 'fedex') {
+            url = `https://www.fedex.com/fedextrack/?tracknumbers=${encodedId}`;
+        } else if (courier === 'ups') {
+            url = `https://www.ups.com/track?tracknum=${encodedId}`;
+        } else if (courier === 'bluedart') {
+            url = `https://www.bluedart.com/tracking?awb=${encodedId}`;
+        } else if (courier === 'dtdc') {
+            url = `https://www.dtdc.in/tracking.asp?strCnno=${encodedId}`;
+        } else if (courier === 'indiapost') {
+            // Official site requires CAPTCHA, using 17TRACK for direct access
+            url = `https://t.17track.net/en#nums=${encodedId}`;
+
+        } else if (courier === 'aramex') {
+            url = `https://www.aramex.com/track/results?ShipmentNumber=${encodedId}`;
+        } else if (courier === 'dpd') {
+            url = `https://www.dpd.com/tracking/?parcelNumber=${encodedId}`;
+        } else {
+            // Default Fallback: Google Search
+            url = `https://www.google.com/search?q=${encodeURIComponent(trackingNumber + ' tracking')}`;
+        }
+
+        // 6. Execute Redirect
         setTimeout(() => {
-            const results = document.getElementById('resWrap');
-            if (results) {
-                document.getElementById('resId').innerText = val.toUpperCase();
-                results.style.display = 'block';
-
-                // Animate result appearance
-                results.style.animation = 'slideUp 0.6s ease forwards';
-
-                // Scroll to results
-                results.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-                // Animate route steps
-                animateRouteSteps();
-            }
-
             btn.innerHTML = originalText;
             btn.disabled = false;
+        }, 1000);
 
-            showNotification('Shipment found! Displaying details...', 'success');
-        }, 1500);
+        // Open Link
+        window.location.href = url;
     }
 
-    // --- ANIMATED ROUTE STEPS ---
-    function animateRouteSteps() {
-        const steps = document.querySelectorAll('.route-step, [style*="text-align: center"]');
-        steps.forEach((step, index) => {
-            step.style.opacity = '0';
-            step.style.transform = 'translateY(20px)';
+    function showTrackError(msg) {
+        const errorBox = document.getElementById('trackError');
+        const errorMsg = document.getElementById('trackErrorMsg');
+        const trackInput = document.getElementById('trackNum');
 
-            setTimeout(() => {
-                step.style.transition = 'all 0.5s ease';
-                step.style.opacity = '1';
-                step.style.transform = 'translateY(0)';
-            }, index * 150);
-        });
+        if (errorBox && errorMsg) {
+            errorMsg.textContent = msg;
+            errorBox.style.display = 'flex';
+        } else {
+            showNotification(msg, 'error');
+        }
+
+        if (trackInput) {
+            trackInput.style.borderColor = '#e74c3c';
+            shakeElement(trackInput);
+            trackInput.focus();
+        }
+    }
+
+    function detectCourier(trk) {
+        // Remove spaces/dashes for regex checks
+        const cleanTrk = trk.replace(/[\s-]/g, '').toUpperCase();
+
+        // 1. DHL: 10 digits
+        if (/^\d{10}$/.test(cleanTrk)) return 'dhl';
+
+        // 2. FedEx: 12 or 15 digits
+        if (/^\d{12}$/.test(cleanTrk) || /^\d{15}$/.test(cleanTrk)) return 'fedex';
+
+        // 3. UPS: Starts with 1Z (18 chars)
+        if (/^1Z[A-Z0-9]{16}$/.test(cleanTrk)) return 'ups';
+
+        // 4. Aramex: 10-11 digits (If 10 didn't match DHL, well DHL is checked first)
+        // Note: Aramex 10 digits will now be caught by DHL check above.
+        // This is the compromise requested ("dhl is not taking").
+        // We catch remaining 11 digits here.
+        if (/^\d{11}$/.test(cleanTrk)) {
+            return 'aramex';
+
+        }
+
+        return null; // Unknown logic -> Google Search
     }
 
     // --- FORM SUBMISSION WITH ANIMATION ---
@@ -196,6 +249,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (weight === 0 && (h === 0 || w === 0 || d === 0)) {
                 animateCounter(costDisplay, 0);
+                document.getElementById('actualWeightDisplay').textContent = '0';
+                document.getElementById('volWeightDisplay').textContent = '0';
                 return;
             }
 
@@ -221,6 +276,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const volWeight = (h * w * d) / 5000;
             const finalWeight = Math.max(weight, volWeight);
 
+            // Update displays
+            document.getElementById('actualWeightDisplay').textContent = weight;
+            document.getElementById('volWeightDisplay').textContent = volWeight.toFixed(2);
+
             let total = finalWeight * baseRate * courierMult * destMult;
             if (total === 0 && weight > 0) total = baseRate * destMult;
 
@@ -235,23 +294,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- ANIMATED COUNTER ---
     function animateCounter(element, target, duration = 1000) {
+        // Clear any existing animation to prevent conflicts
+        if (element.dataset.animId) {
+            cancelAnimationFrame(parseInt(element.dataset.animId));
+            delete element.dataset.animId;
+        }
+
         const start = parseInt(element.textContent.replace(/,/g, '')) || 0;
+
+        // If values are same, precise update and exit
+        if (start === target) {
+            element.textContent = target.toLocaleString();
+            return;
+        }
+
         const increment = (target - start) / (duration / 16);
         let current = start;
 
         const updateCounter = () => {
             current += increment;
 
+            // Check if we reached/passed the target
             if ((increment > 0 && current >= target) || (increment < 0 && current <= target)) {
                 element.textContent = target.toLocaleString();
+                delete element.dataset.animId;
                 return;
             }
 
             element.textContent = Math.floor(current).toLocaleString();
-            requestAnimationFrame(updateCounter);
+            element.dataset.animId = requestAnimationFrame(updateCounter);
         };
 
-        updateCounter();
+        element.dataset.animId = requestAnimationFrame(updateCounter);
     }
 
     // --- SCROLL REVEAL ANIMATIONS ---
@@ -534,6 +608,29 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     `;
     document.head.appendChild(style);
+
+
+    // --- MOBILE MENU TOGGLE ---
+    const menuBtn = document.querySelector('.mobile-menu-btn');
+    const navLinks = document.querySelector('.nav-links');
+    const navLinksItems = document.querySelectorAll('.nav-link');
+
+    if (menuBtn && navLinks) {
+        menuBtn.addEventListener('click', () => {
+            menuBtn.classList.toggle('active');
+            navLinks.classList.toggle('active');
+            document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
+        });
+
+        // Close menu when clicking a link
+        navLinksItems.forEach(link => {
+            link.addEventListener('click', () => {
+                menuBtn.classList.remove('active');
+                navLinks.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+    }
 
     console.log('✨ Bethel Express Premium Experience Loaded');
 });

@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Track Shipment | Bethel Express & Impex</title>
+    <link rel="icon" type="image/png" href="assets/images/logo.png">
     <meta name="description"
         content="Track your international courier and pharmaceutical shipments in real-time with our advanced logistics tracking system.">
     <link rel="stylesheet" href="assets/css/styles.css">
@@ -54,13 +55,59 @@
             margin: 0 auto 50px;
         }
 
+        /* Enhanced Tracking Input */
         .tracking-input-group {
             display: flex;
             border: 2px solid #eee;
             border-radius: 4px;
-            overflow: hidden;
+            overflow: visible;
+            /* Changed to visible for select dropdown if needed, though hidden is fine usually */
             transition: all 0.4s ease;
             background: #fff;
+            position: relative;
+        }
+
+        .select-wrapper {
+            position: relative;
+            min-width: 200px;
+            border-right: 1px solid #eee;
+            background: #f8f9fa;
+        }
+
+        .select-wrapper select {
+            width: 100%;
+            height: 100%;
+            border: none;
+            padding: 0 20px 0 45px;
+            /* Space for icon */
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 500;
+            color: #333;
+            appearance: none;
+            -webkit-appearance: none;
+            cursor: pointer;
+            background: transparent;
+            outline: none;
+        }
+
+        .select-wrapper .select-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-gold);
+            pointer-events: none;
+        }
+
+        .select-wrapper .dropdown-arrow {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            pointer-events: none;
+            font-size: 12px;
         }
 
         .tracking-input-group:focus-within {
@@ -77,6 +124,7 @@
             background: transparent;
             letter-spacing: 1px;
         }
+
 
         .tracking-input-group input:focus {
             outline: none;
@@ -491,6 +539,17 @@
                 flex-direction: column;
             }
 
+            .select-wrapper {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid #eee;
+                height: 60px;
+            }
+
+            .tracking-input-group input {
+                border-bottom: 1px solid #eee;
+            }
+
             .tracking-input-group .btn {
                 width: 100%;
                 justify-content: center;
@@ -530,6 +589,11 @@
                 <li><a href="tracking.html" class="nav-link active">Track Shipment</a></li>
                 <li><a href="contact.html" class="nav-link">Contact</a></li>
             </ul>
+            <div class="mobile-menu-btn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
             <a href="contact.html" class="btn btn-primary">Request Quote</a>
         </div>
     </header>
@@ -558,99 +622,17 @@
                     </div>
 
                     <div class="tracking-input-group">
-                        <i class="fas fa-search"
-                            style="padding: 22px; color: var(--primary-gold); font-size: 20px;"></i>
-                        <input type="text" placeholder="Enter Tracking ID (e.g., BTX-1029304857)" id="trackNum">
+                        <input type="text" placeholder="Enter Tracking Number" id="trackNum">
                         <button class="btn btn-primary" id="searchBtn">
-                            <i class="fas fa-radar" style="margin-right: 10px;"></i> FIND PARCEL
+                            <i class="fas fa-paper-plane" style="margin-right: 10px;"></i> TRACK
                         </button>
                     </div>
 
-                    <!-- Full Tracking Result Panel -->
-                    <div id="resWrap" class="tracking-result">
-                        <div class="result-header">
-                            <div class="result-id">
-                                <h4
-                                    style="color: #888; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">
-                                    <i class="fas fa-box" style="margin-right: 8px;"></i> SHIPMENT ID
-                                </h4>
-                                <h2 id="resId"></h2>
-                            </div>
-                            <div class="result-status">
-                                <div class="status-badge">
-                                    <i class="fas fa-shipping-fast"></i>
-                                    <span>IN TRANSIT</span>
-                                </div>
-                                <p style="margin-top: 15px; font-size: 14px; color: #888;">
-                                    Expected Arrival: <strong style="color: var(--primary-dark);">Feb 08, 2026</strong>
-                                </p>
-                            </div>
-                        </div>
-
-                        <!-- Route Visualizer -->
-                        <div class="route-visualizer">
-                            <div class="route-step">
-                                <div class="route-dot completed">
-                                    <i class="fas fa-check"></i>
-                                </div>
-                                <p class="route-label">Pickup</p>
-                                <p class="route-location">Chennai, IN</p>
-                            </div>
-                            <div class="route-step">
-                                <div class="route-dot completed">
-                                    <i class="fas fa-check"></i>
-                                </div>
-                                <p class="route-label">Gateway</p>
-                                <p class="route-location">Mumbai, IN</p>
-                            </div>
-                            <div class="route-step">
-                                <div class="route-dot active">
-                                    <i class="fas fa-plane"></i>
-                                </div>
-                                <p class="route-label" style="color: var(--primary-gold);">Transit</p>
-                                <p class="route-location">International Air</p>
-                            </div>
-                            <div class="route-step" style="opacity: 0.4;">
-                                <div class="route-dot pending"></div>
-                                <p class="route-label">Delivery</p>
-                                <p class="route-location">Pending</p>
-                            </div>
-                        </div>
-
-                        <!-- Detail List -->
-                        <div class="milestones-section">
-                            <h4><i class="fas fa-history"></i> Shipment Milestones</h4>
-                            <div class="milestone-list">
-                                <div class="milestone-item latest">
-                                    <p class="milestone-title">
-                                        <i class="fas fa-map-marker-alt"></i>
-                                        Arrived at International Sorting Hub (Dubai)
-                                    </p>
-                                    <p class="milestone-time">Feb 02, 2026 | 21:40 PM</p>
-                                </div>
-                                <div class="milestone-item past">
-                                    <p class="milestone-title">
-                                        <i class="fas fa-truck"></i>
-                                        Shipment Forwarded to Transit Hub
-                                    </p>
-                                    <p class="milestone-time">Feb 01, 2026 | 14:15 PM</p>
-                                </div>
-                                <div class="milestone-item past">
-                                    <p class="milestone-title">
-                                        <i class="fas fa-clipboard-check"></i>
-                                        Manifest Generated at Origin
-                                    </p>
-                                    <p class="milestone-time">Jan 31, 2026 | 09:30 AM</p>
-                                </div>
-                                <div class="milestone-item past">
-                                    <p class="milestone-title">
-                                        <i class="fas fa-box-open"></i>
-                                        Package Received at Bethel Express
-                                    </p>
-                                    <p class="milestone-time">Jan 31, 2026 | 08:00 AM</p>
-                                </div>
-                            </div>
-                        </div>
+                    <!-- Error Message Container (Hidden by default) -->
+                    <div id="trackError"
+                        style="display: none; margin-top: 20px; padding: 15px; background: #ffebee; color: #c62828; border-radius: 4px; border-left: 4px solid #c62828; animation: fadeInUp 0.3s ease;">
+                        <i class="fas fa-exclamation-circle" style="margin-right: 8px;"></i>
+                        <span id="trackErrorMsg">Please check your tracking number.</span>
                     </div>
 
                     <!-- Quick Actions -->
@@ -742,9 +724,9 @@
                             <div class="footer-logo-text">BETHEL<br><span>EXPRESS & IMPEX</span></div>
                         </div>
                         <p class="footer-desc">Your premium logistics partner specializing in international courier and
-                            wholesale pharmaceutical distribution. TNMSC Licensed & Globally Strategic.</p>
+                            wholesale pharmaceutical distribution. TN Licensed & Globally Strategic.</p>
                         <div class="footer-certs">
-                            <span class="cert-badge"><i class="fas fa-certificate"></i> TNMSC Licensed</span>
+                            <span class="cert-badge"><i class="fas fa-certificate"></i> TN Licensed</span>
                             <span class="cert-badge"><i class="fas fa-shield-alt"></i> ISO Certified</span>
                         </div>
                         <div class="footer-social">
