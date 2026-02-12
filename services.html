@@ -203,12 +203,21 @@
             height: 350px;
             overflow: hidden;
             cursor: pointer;
+            border-radius: 12px;
+            transform-style: preserve-3d;
+            transition: transform 0.6s ease, box-shadow 0.6s ease;
+        }
+
+        .partnership-card:hover {
+            transform: perspective(800px) rotateY(-5deg) rotateX(3deg) translateY(-10px);
+            box-shadow: 20px 20px 60px rgba(0, 0, 0, 0.3);
         }
 
         .partnership-card img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            object-position: top;
             transition: transform 0.8s ease;
         }
 
@@ -639,6 +648,21 @@
                         <div class="partnership-content">
                             <h4>DHL Global Air</h4>
                             <p>High-speed document express network covering 180+ nations with customs expertise.</p>
+                        </div>
+                    </div>
+                    <div class="partnership-card reveal stagger-3">
+                        <img src="assets/images/cargo-truck.jpg" alt="UPS">
+                        <div class="partnership-content">
+                            <h4>UPS Worldwide</h4>
+                            <p>Robust ground and air logistics network for reliable bulk shipping across continents.</p>
+                        </div>
+                    </div>
+                    <div class="partnership-card reveal stagger-4">
+                        <img src="assets/images/aramex.jpg" alt="Aramex">
+                        <div class="partnership-content">
+                            <h4>Aramex Logistics</h4>
+                            <p>Extensive last-mile delivery and e-commerce logistics across the Middle East & South
+                                Asia.</p>
                         </div>
                     </div>
                 </div>

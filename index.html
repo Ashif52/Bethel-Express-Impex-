@@ -61,6 +61,7 @@
             position: relative;
             overflow: hidden;
             transition: all 0.4s ease;
+            border-radius: 12px;
         }
 
         .quick-track-card::before {
@@ -76,6 +77,59 @@
 
         .quick-track-card:hover {
             box-shadow: 0 40px 100px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Track Grid Layout */
+        .track-grid-layout {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .tracking-input-group {
+            display: flex;
+            border: 2px solid #eee;
+            border-radius: 6px;
+            background: #fff;
+            position: relative;
+            gap: 10px;
+            padding: 6px;
+        }
+
+        .track-input-field {
+            background: transparent;
+            flex: 1;
+            border: none;
+            padding: 14px 16px;
+            font-size: 16px;
+            font-family: inherit;
+            outline: none;
+        }
+
+        .track-btn {
+            padding: 15px 40px;
+            border-radius: 4px;
+        }
+
+        /* Calculator Form Card */
+        .calc-form-card {
+            background: #fff;
+            padding: 50px;
+            box-shadow: var(--shadow-soft);
+            border-radius: 12px;
+        }
+
+        .calc-dimensions-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+        }
+
+        .calc-location-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
         }
 
         /* Partner Cards */
@@ -299,20 +353,129 @@
         }
 
         @media (max-width: 768px) {
-            .quick-track-card>div:first-child {
-                grid-template-columns: 1fr;
+
+            /* === Dynamic Tracking Bar - Mobile === */
+            .quick-track-card {
+                padding: 25px 20px !important;
+                border-left-width: 4px;
             }
 
+            .track-grid-layout {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .quick-track-card h3 {
+                font-size: 20px !important;
+            }
+
+            .tracking-input-group {
+                flex-direction: column !important;
+                border-radius: 8px !important;
+            }
+
+            .tracking-input-group input {
+                padding: 16px !important;
+                font-size: 15px !important;
+                border-bottom: 2px solid #eee !important;
+            }
+
+            .tracking-input-group button {
+                border-radius: 0 0 8px 8px !important;
+                padding: 14px 20px !important;
+                width: 100% !important;
+                justify-content: center;
+            }
+
+            /* === Calculate Your Cost - Mobile === */
+            .calc-grid {
+                grid-template-columns: 1fr !important;
+            }
+
+            .calc-form-card {
+                padding: 25px 20px;
+            }
+
+            .calc-dimensions-row {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .calc-location-row {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .calc-result-box {
+                padding: 30px 20px !important;
+            }
+
+            .calc-result-box h2 {
+                font-size: 36px !important;
+            }
+
+            /* === Other Mobile Fixes === */
             .industry-grid {
                 grid-template-columns: 1fr;
             }
 
             .pharma-grid {
                 grid-template-columns: 1fr !important;
+                gap: 40px !important;
             }
 
-            .calc-grid {
-                grid-template-columns: 1fr !important;
+            .TN-badge {
+                bottom: -20px !important;
+                right: -20px !important;
+                padding: 20px !important;
+                width: 130px !important;
+            }
+
+            .TN-badge h2 {
+                font-size: 28px !important;
+            }
+
+            .hub-card {
+                position: relative !important;
+                top: auto !important;
+                right: auto !important;
+                margin-top: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+
+            /* Tracking bar even tighter */
+            .quick-track-card {
+                padding: 20px 15px !important;
+                margin-top: -40px;
+            }
+
+            .quick-track-card h3 {
+                font-size: 18px !important;
+            }
+
+            .tracking-input-group input {
+                padding: 14px !important;
+                font-size: 14px !important;
+            }
+
+            .tracking-input-group button {
+                padding: 12px 16px !important;
+                font-size: 13px !important;
+            }
+
+            /* Calculator tighter */
+            .calc-form-card {
+                padding: 20px 15px;
+            }
+
+            .calc-result-box {
+                padding: 25px 15px !important;
+            }
+
+            .calc-result-box h2 {
+                font-size: 30px !important;
             }
         }
     </style>
@@ -390,7 +553,7 @@
         <!-- Dynamic Tracking Bar -->
         <div class="container" style="position: relative; z-index: 5; margin-top: -80px;">
             <div class="quick-track-card reveal">
-                <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 40px; align-items: center;">
+                <div class="track-grid-layout">
                     <div>
                         <h3 style="font-size: 24px; margin-bottom: 5px;">
                             <i class="fas fa-shipping-fast" style="color: var(--primary-gold); margin-right: 10px;"></i>
@@ -398,12 +561,9 @@
                         </h3>
                         <p style="color: #888; font-size: 14px;">Instant real-time shipment updates</p>
                     </div>
-                    <div class="tracking-input-group"
-                        style="display:flex; border: 2px solid #eee; border-radius: 4px; background: #fff; position: relative;">
-                        <input type="text" placeholder="Enter Tracking Number" id="trackNum"
-                            style="background: transparent; flex: 1; border: none; padding: 20px; font-size: 16px;">
-                        <button class="btn btn-primary" id="searchBtn"
-                            style="padding: 15px 40px; border-radius: 0 4px 4px 0;">
+                    <div class="tracking-input-group">
+                        <input type="text" placeholder="Enter Tracking Number" id="trackNum" class="track-input-field">
+                        <button class="btn btn-primary track-btn" id="searchBtn">
                             <i class="fas fa-paper-plane" style="margin-right: 8px;"></i> TRACK
                         </button>
                     </div>
@@ -416,258 +576,258 @@
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Partnership Alliance Section -->
-            <section style="background: var(--bg-light);">
-                <div class="container">
-                    <div style="text-align: center; margin-bottom: 80px;" class="reveal">
-                        <span class="section-tag">Our Global Alliance</span>
-                        <h2 class="section-title">Powered by Industry Leaders.</h2>
-                        <p style="max-width: 700px; margin: 0 auto; color: #666;">We integrate our logistics engine with
-                            the
-                            world's most trusted courier networks to guarantee speed, safety, and reach.</p>
-                    </div>
-                    <div class="partner-grid">
-                        <div class="partner-card reveal stagger-1">
-                            <img src="assets/images/dhl-transit.jpg" alt="DHL Partnership" style="width: 100%;">
-                            <span class="partner-badge">Gold Partner</span>
-                            <h3>DHL Integration</h3>
-                            <p style="color: #777; font-size: 15px; margin-top: 15px;">Leveraging DHL's massive air and
-                                ground network for time-sensitive global deliveries with 24/7 visibility.</p>
-                        </div>
-                        <div class="partner-card reveal stagger-2">
-                            <img src="assets/images/fedex-flight.jpg" alt="FedEx Partnership" style="width: 100%;">
-                            <span class="partner-badge">Elite Partner</span>
-                            <h3>FedEx Express</h3>
-                            <p style="color: #777; font-size: 15px; margin-top: 15px;">Direct access to FedEx's premium
-                                international priority services, ensuring customs clearance expertise and rapid transit.
-                            </p>
-                        </div>
-                        <div class="partner-card reveal stagger-3">
-                            <img src="assets/images/cargo-truck.jpg" alt="UPS Partnership" style="width: 100%;">
-                            <span class="partner-badge">Global Partner</span>
-                            <h3>UPS Distribution</h3>
-                            <p style="color: #777; font-size: 15px; margin-top: 15px;">Utilizing UPS's robust logistics
-                                infrastructure for reliable bulk shipping and complex supply chain requirements across
-                                continents.</p>
-                        </div>
-                    </div>
+        <!-- Partnership Alliance Section -->
+        <section style="background: var(--bg-light);">
+            <div class="container">
+                <div style="text-align: center; margin-bottom: 80px;" class="reveal">
+                    <span class="section-tag">Our Global Alliance</span>
+                    <h2 class="section-title">Powered by Industry Leaders.</h2>
+                    <p style="max-width: 700px; margin: 0 auto; color: #666;">We integrate our logistics engine with
+                        the
+                        world's most trusted courier networks to guarantee speed, safety, and reach.</p>
                 </div>
-            </section>
-
-            <!-- Pharma Excellence Section -->
-            <section class="pharma-section">
-                <div class="container">
-                    <div class="pharma-grid"
-                        style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 100px; align-items: center;">
-                        <div class="pharma-image-wrap reveal-left">
-                            <img src="assets/images/pharma-logistics.jpg" alt="Pharma Distribution">
-                            <div class="TN-badge">
-                                <h2>TN</h2>
-                                <p>Licensed Agency</p>
-                            </div>
-                        </div>
-                        <div class="reveal-right">
-                            <span class="section-tag">Specialized Logistics</span>
-                            <h2 class="section-title">Critical Care.<br><span class="gradient-text">Absolute
-                                    Compliance.</span></h2>
-                            <p style="margin-bottom: 25px; color: #555;">Bethel Express & Impex is a certified wholesale
-                                supplier for quality medicines. Our TN license reflects our commitment to the highest
-                                standards of pharmaceutical distribution.</p>
-                            <ul class="check-list" style="margin-bottom: 40px;">
-                                <li><i class="fas fa-check-circle"></i> <span>Temperature Controlled Supply Chain</span>
-                                </li>
-                                <li><i class="fas fa-check-circle"></i> <span>Regulatory Documentation Support</span>
-                                </li>
-                                <li><i class="fas fa-check-circle"></i> <span>Wholesale Medical Distribution</span></li>
-                                <li><i class="fas fa-check-circle"></i> <span>24/7 Cold Chain Monitoring</span></li>
-                            </ul>
-                            <a href="services.html" class="btn btn-primary">
-                                <i class="fas fa-arrow-right" style="margin-right: 10px;"></i> Learn More
-                            </a>
-                        </div>
+                <div class="partner-grid">
+                    <div class="partner-card reveal stagger-1">
+                        <img src="assets/images/dhl-transit.jpg" alt="DHL Partnership" style="width: 100%;">
+                        <span class="partner-badge">Gold Partner</span>
+                        <h3>DHL Integration</h3>
+                        <p style="color: #777; font-size: 15px; margin-top: 15px;">Leveraging DHL's massive air and
+                            ground network for time-sensitive global deliveries with 24/7 visibility.</p>
                     </div>
-                </div>
-            </section>
-
-            <!-- Calculate Your Cost Section -->
-            <section style="background: var(--bg-light);">
-                <div class="container">
-                    <div style="text-align: center; margin-bottom: 60px;" class="reveal">
-                        <span class="section-tag">Shipping Estimator</span>
-                        <h2 class="section-title">Calculate Your Cost.</h2>
-                        <p style="color: #666;">Get an instant estimate for your international courier and cargo
-                            shipments.
+                    <div class="partner-card reveal stagger-2">
+                        <img src="assets/images/fedex-flight.jpg" alt="FedEx Partnership" style="width: 100%;">
+                        <span class="partner-badge">Elite Partner</span>
+                        <h3>FedEx Express</h3>
+                        <p style="color: #777; font-size: 15px; margin-top: 15px;">Direct access to FedEx's premium
+                            international priority services, ensuring customs clearance expertise and rapid transit.
                         </p>
                     </div>
+                    <div class="partner-card reveal stagger-3">
+                        <img src="assets/images/cargo-truck.jpg" alt="UPS Partnership" style="width: 100%;">
+                        <span class="partner-badge">Global Partner</span>
+                        <h3>UPS Distribution</h3>
+                        <p style="color: #777; font-size: 15px; margin-top: 15px;">Utilizing UPS's robust logistics
+                            infrastructure for reliable bulk shipping and complex supply chain requirements across
+                            continents.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-                    <div class="calc-grid" id="calcForm">
-                        <div style="background: #fff; padding: 50px; box-shadow: var(--shadow-soft);"
-                            class="reveal stagger-1">
-                            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
-                                <div class="calc-input-group">
-                                    <label>Height (cm)</label>
-                                    <input type="number" id="calcH" class="calc-field" placeholder="0">
-                                </div>
-                                <div class="calc-input-group">
-                                    <label>Width (cm)</label>
-                                    <input type="number" id="calcW" class="calc-field" placeholder="0">
-                                </div>
-                                <div class="calc-input-group">
-                                    <label>Depth (cm)</label>
-                                    <input type="number" id="calcD" class="calc-field" placeholder="0">
-                                </div>
-                            </div>
+        <!-- Pharma Excellence Section -->
+        <section class="pharma-section">
+            <div class="container">
+                <div class="pharma-grid"
+                    style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 100px; align-items: center;">
+                    <div class="pharma-image-wrap reveal-left">
+                        <img src="assets/images/pharma-logistics.jpg" alt="Pharma Distribution">
+                        <div class="TN-badge">
+                            <h2>TN</h2>
+                            <p>Licensed Agency</p>
+                        </div>
+                    </div>
+                    <div class="reveal-right">
+                        <span class="section-tag">Specialized Logistics</span>
+                        <h2 class="section-title">Critical Care.<br><span class="gradient-text">Absolute
+                                Compliance.</span></h2>
+                        <p style="margin-bottom: 25px; color: #555;">Bethel Express & Impex is a certified wholesale
+                            supplier for quality medicines. Our TN license reflects our commitment to the highest
+                            standards of pharmaceutical distribution.</p>
+                        <ul class="check-list" style="margin-bottom: 40px;">
+                            <li><i class="fas fa-check-circle"></i> <span>Temperature Controlled Supply Chain</span>
+                            </li>
+                            <li><i class="fas fa-check-circle"></i> <span>Regulatory Documentation Support</span>
+                            </li>
+                            <li><i class="fas fa-check-circle"></i> <span>Wholesale Medical Distribution</span></li>
+                            <li><i class="fas fa-check-circle"></i> <span>24/7 Cold Chain Monitoring</span></li>
+                        </ul>
+                        <a href="services.html" class="btn btn-primary">
+                            <i class="fas fa-arrow-right" style="margin-right: 10px;"></i> Learn More
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
 
+        <!-- Calculate Your Cost Section -->
+        <section style="background: var(--bg-light);">
+            <div class="container">
+                <div style="text-align: center; margin-bottom: 60px;" class="reveal">
+                    <span class="section-tag">Shipping Estimator</span>
+                    <h2 class="section-title">Calculate Your Cost.</h2>
+                    <p style="color: #666;">Get an instant estimate for your international courier and cargo
+                        shipments.
+                    </p>
+                </div>
+
+                <div class="calc-grid" id="calcForm">
+                    <div class="calc-form-card reveal stagger-1">
+                        <div class="calc-dimensions-row">
                             <div class="calc-input-group">
-                                <label>Weight (kg)</label>
-                                <input type="number" id="calcWeight" class="calc-field" placeholder="Enter Weight">
+                                <label>Height (cm)</label>
+                                <input type="number" id="calcH" class="calc-field" placeholder="0">
                             </div>
-
                             <div class="calc-input-group">
-                                <label>Courier</label>
-                                <select id="calcCourier" class="calc-select">
-                                    <option value="standard">Select Courier</option>
-                                    <option value="dhl">DHL Express</option>
-                                    <option value="fedex">FedEx Priority</option>
-                                    <option value="ups">UPS Worldwide</option>
-                                </select>
+                                <label>Width (cm)</label>
+                                <input type="number" id="calcW" class="calc-field" placeholder="0">
                             </div>
-
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                                <div class="calc-input-group">
-                                    <label>From Location</label>
-                                    <input type="text" class="calc-field" value="Chennai" readonly
-                                        style="background: #f9f9f9; cursor: not-allowed;">
-                                </div>
-                                <div class="calc-input-group">
-                                    <label>Destination</label>
-                                    <select id="calcDest" class="calc-select">
-                                        <option value="domestic">Select Destination</option>
-                                        <option value="usa">USA</option>
-                                        <option value="uk">United Kingdom</option>
-                                        <option value="uae">United Arab Emirates</option>
-                                        <option value="singapore">Singapore</option>
-                                    </select>
-                                </div>
+                            <div class="calc-input-group">
+                                <label>Depth (cm)</label>
+                                <input type="number" id="calcD" class="calc-field" placeholder="0">
                             </div>
+                        </div>
 
-                            <div class="calc-input-group" style="margin-bottom: 0;">
-                                <label>Package Type</label>
-                                <select id="calcPkg" class="calc-select">
-                                    <option value="parcel">Select Document Type</option>
-                                    <option value="document">Commercial Documents</option>
-                                    <option value="parcel">General Parcel</option>
-                                    <option value="pharma">Pharmaceutical Batch</option>
+                        <div class="calc-input-group">
+                            <label>Weight (kg)</label>
+                            <input type="number" id="calcWeight" class="calc-field" placeholder="Enter Weight">
+                        </div>
+
+                        <div class="calc-input-group">
+                            <label>Courier</label>
+                            <select id="calcCourier" class="calc-select">
+                                <option value="standard">Select Courier</option>
+                                <option value="dhl">DHL Express</option>
+                                <option value="fedex">FedEx Priority</option>
+                                <option value="ups">UPS Worldwide</option>
+                            </select>
+                        </div>
+
+                        <div class="calc-location-row">
+                            <div class="calc-input-group">
+                                <label>From Location</label>
+                                <input type="text" class="calc-field" value="Chennai" readonly
+                                    style="background: #f9f9f9; cursor: not-allowed;">
+                            </div>
+                            <div class="calc-input-group">
+                                <label>Destination</label>
+                                <select id="calcDest" class="calc-select">
+                                    <option value="domestic">Select Destination</option>
+                                    <option value="usa">USA</option>
+                                    <option value="uk">United Kingdom</option>
+                                    <option value="uae">United Arab Emirates</option>
+                                    <option value="singapore">Singapore</option>
                                 </select>
                             </div>
                         </div>
 
-                        <div class="calc-result-box reveal stagger-2">
-                            <span class="section-tag" style="color: #fff; opacity: 0.6;">Estimated Total</span>
-                            <div
-                                style="margin: 20px 0; font-size: 14px; color: #ddd; display: flex; flex-direction: column; gap: 5px;">
-                                <span>Actual Weight: <strong style="color: #fff;"><span
-                                            id="actualWeightDisplay">0</span> kg</strong></span>
-                                <span>Volumetric Weight: <strong style="color: #fff;"><span
-                                            id="volWeightDisplay">0</span> kg</strong></span>
-                            </div>
-                            <h4 style="margin: 20px 0 10px; position: relative; z-index: 1;">Total Cost:</h4>
-                            <h2>Rs. <span id="totalCost">0</span></h2>
-                            <p
-                                style="font-size: 13px; color: var(--text-grey); margin-top: 30px; position: relative; z-index: 1;">
-                                *Rates are indicative based on standard weight/volumetric weight. Final charges may vary
-                                after pickup and inspection.
-                            </p>
-                            <a href="contact.html" class="btn btn-primary" style="margin-top: 40px;">
-                                <i class="fas fa-paper-plane" style="margin-right: 10px;"></i> Propose Booking
-                            </a>
+                        <div class="calc-input-group" style="margin-bottom: 0;">
+                            <label>Package Type</label>
+                            <select id="calcPkg" class="calc-select">
+                                <option value="parcel">Select Document Type</option>
+                                <option value="document">Commercial Documents</option>
+                                <option value="parcel">General Parcel</option>
+                                <option value="pharma">Pharmaceutical Batch</option>
+                            </select>
                         </div>
+                    </div>
+
+                    <div class="calc-result-box reveal stagger-2">
+                        <span class="section-tag" style="color: #fff; opacity: 0.6;">Estimated Total</span>
+                        <div
+                            style="margin: 20px 0; font-size: 14px; color: #ddd; display: flex; flex-direction: column; gap: 5px;">
+                            <span>Actual Weight: <strong style="color: #fff;"><span id="actualWeightDisplay">0</span>
+                                    kg</strong></span>
+                            <span>Volumetric Weight: <strong style="color: #fff;"><span id="volWeightDisplay">0</span>
+                                    kg</strong></span>
+                        </div>
+                        <h4 style="margin: 20px 0 10px; position: relative; z-index: 1;">Total Cost:</h4>
+                        <h2>Rs. <span id="totalCost">0</span></h2>
+                        <p
+                            style="font-size: 13px; color: var(--text-grey); margin-top: 30px; position: relative; z-index: 1;">
+                            *Rates are indicative based on standard weight/volumetric weight. Final charges may vary
+                            after pickup and inspection.
+                        </p>
+                        <a href="contact.html" class="btn btn-primary" style="margin-top: 40px;">
+                            <i class="fas fa-paper-plane" style="margin-right: 10px;"></i> Propose Booking
+                        </a>
                     </div>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <!-- Global Map Section -->
-            <section class="map-section" style="background: var(--primary-dark); color: #fff; overflow: hidden;">
-                <div class="container">
-                    <div style="text-align: center; margin-bottom: 100px;" class="reveal">
-                        <span class="section-tag" style="color: var(--primary-gold);">Global Presence</span>
-                        <h2 class="section-title" style="color: #fff;">Our Footprint Across 200+ Nations.</h2>
-                    </div>
-                    <div style="position: relative;">
-                        <img src="assets/images/3d-world-map.png" alt="Global Operations Map">
-                        <div class="hub-card">
-                            <h3><i class="fas fa-map-marker-alt"
-                                    style="color: var(--primary-gold); margin-right: 10px;"></i> Direct Export Hubs</h3>
-                            <p style="color: var(--text-grey); font-size: 14px; margin-top: 15px;">
-                                Dubai • Singapore • London • New York • Chennai (HQ)
-                            </p>
-                        </div>
-                    </div>
+        <!-- Global Map Section -->
+        <section class="map-section" style="background: var(--primary-dark); color: #fff; overflow: hidden;">
+            <div class="container">
+                <div style="text-align: center; margin-bottom: 100px;" class="reveal">
+                    <span class="section-tag" style="color: var(--primary-gold);">Global Presence</span>
+                    <h2 class="section-title" style="color: #fff;">Our Footprint Across 200+ Nations.</h2>
                 </div>
-            </section>
-
-            <!-- Industries Served Grid -->
-            <section>
-                <div class="container">
-                    <div style="text-align: center; margin-bottom: 80px;" class="reveal">
-                        <span class="section-tag">Serving Excellence</span>
-                        <h2 class="section-title">Industries We Empower.</h2>
-                    </div>
-                    <div class="industry-grid">
-                        <div class="industry-card reveal stagger-1">
-                            <img src="assets/images/smart-logistics.jpg" alt="Technology Sector">
-                            <div class="industry-card-content">
-                                <h4 style="color: #fff;">Technology</h4>
-                                <p style="color: var(--primary-gold); font-size: 12px; text-transform: uppercase;">
-                                    Hardware
-                                    & IT Solutions</p>
-                            </div>
-                        </div>
-                        <div class="industry-card reveal stagger-2">
-                            <img src="assets/images/pharma-logistics.jpg" alt="Healthcare Sector">
-                            <div class="industry-card-content">
-                                <h4 style="color: #fff;">Healthcare</h4>
-                                <p style="color: var(--primary-gold); font-size: 12px; text-transform: uppercase;">
-                                    Pharmaceuticals & Lab</p>
-                            </div>
-                        </div>
-                        <div class="industry-card reveal stagger-3">
-                            <img src="assets/images/courier-desk.jpg" alt="E-commerce Sector">
-                            <div class="industry-card-content">
-                                <h4 style="color: #fff;">E-Commerce</h4>
-                                <p style="color: var(--primary-gold); font-size: 12px; text-transform: uppercase;">
-                                    Direct to
-                                    Consumer</p>
-                            </div>
-                        </div>
-                        <div class="industry-card reveal stagger-4">
-                            <img src="assets/images/warehouse-deep.jpg" alt="Manufacturing">
-                            <div class="industry-card-content">
-                                <h4 style="color: #fff;">Industrial</h4>
-                                <p style="color: var(--primary-gold); font-size: 12px; text-transform: uppercase;">Heavy
-                                    Parts & Spares</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Final CTA -->
-            <section class="cta-gold">
-                <div class="container cta-content">
-                    <div style="max-width: 600px;">
-                        <h2>Ready for World-Class Service?</h2>
-                        <p>Get in touch with our logistics consultants for a custom quote tailored to your business
-                            scale.
+                <div style="position: relative;">
+                    <img src="assets/images/3d-world-map.png" alt="Global Operations Map">
+                    <div class="hub-card">
+                        <h3><i class="fas fa-map-marker-alt"
+                                style="color: var(--primary-gold); margin-right: 10px;"></i> Direct Export Hubs</h3>
+                        <p style="color: var(--text-grey); font-size: 14px; margin-top: 15px;">
+                            Dubai • Singapore • London • New York • Chennai (HQ)
                         </p>
                     </div>
-                    <a href="contact.html" class="btn"
-                        style="background: var(--primary-dark); color: var(--primary-gold); padding: 20px 50px;">
-                        <i class="fas fa-arrow-right" style="margin-right: 10px;"></i> GET A QUOTE NOW
-                    </a>
                 </div>
-            </section>
+            </div>
+        </section>
+
+        <!-- Industries Served Grid -->
+        <section>
+            <div class="container">
+                <div style="text-align: center; margin-bottom: 80px;" class="reveal">
+                    <span class="section-tag">Serving Excellence</span>
+                    <h2 class="section-title">Industries We Empower.</h2>
+                </div>
+                <div class="industry-grid">
+                    <div class="industry-card reveal stagger-1">
+                        <img src="assets/images/smart-logistics.jpg" alt="Technology Sector">
+                        <div class="industry-card-content">
+                            <h4 style="color: #fff;">Technology</h4>
+                            <p style="color: var(--primary-gold); font-size: 12px; text-transform: uppercase;">
+                                Hardware
+                                & IT Solutions</p>
+                        </div>
+                    </div>
+                    <div class="industry-card reveal stagger-2">
+                        <img src="assets/images/pharma-logistics.jpg" alt="Healthcare Sector">
+                        <div class="industry-card-content">
+                            <h4 style="color: #fff;">Healthcare</h4>
+                            <p style="color: var(--primary-gold); font-size: 12px; text-transform: uppercase;">
+                                Pharmaceuticals & Lab</p>
+                        </div>
+                    </div>
+                    <div class="industry-card reveal stagger-3">
+                        <img src="assets/images/courier-desk.jpg" alt="E-commerce Sector">
+                        <div class="industry-card-content">
+                            <h4 style="color: #fff;">E-Commerce</h4>
+                            <p style="color: var(--primary-gold); font-size: 12px; text-transform: uppercase;">
+                                Direct to
+                                Consumer</p>
+                        </div>
+                    </div>
+                    <div class="industry-card reveal stagger-4">
+                        <img src="assets/images/warehouse-deep.jpg" alt="Manufacturing">
+                        <div class="industry-card-content">
+                            <h4 style="color: #fff;">Industrial</h4>
+                            <p style="color: var(--primary-gold); font-size: 12px; text-transform: uppercase;">Heavy
+                                Parts & Spares</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final CTA -->
+        <section class="cta-gold">
+            <div class="container cta-content">
+                <div style="max-width: 600px;">
+                    <h2>Ready for World-Class Service?</h2>
+                    <p>Get in touch with our logistics consultants for a custom quote tailored to your business
+                        scale.
+                    </p>
+                </div>
+                <a href="contact.html" class="btn"
+                    style="background: var(--primary-dark); color: var(--primary-gold); padding: 20px 50px;">
+                    <i class="fas fa-arrow-right" style="margin-right: 10px;"></i> GET A QUOTE NOW
+                </a>
+            </div>
+        </section>
     </main>
 
     <footer>
