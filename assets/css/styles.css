@@ -1844,6 +1844,15 @@ footer::after {
     color: var(--primary-gold);
 }
 
+.footer-bottom p a {
+    color: var(--text-grey);
+    transition: color 0.3s ease;
+}
+
+.footer-bottom p a:hover {
+    color: var(--primary-gold);
+}
+
 .footer-payment {
     display: flex;
     align-items: center;
