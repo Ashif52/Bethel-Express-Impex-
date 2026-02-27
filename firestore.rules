@@ -1,0 +1,23 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Rates collection: anyone can read, only admins can write
+    match /rates/{country} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Users collection: strictly private, no direct client access
+    match /users/{userId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow write: if false; // Only manageable through Firebase Console or Admin SDK
+    }
+
+    // Helper function to check if user has admin role
+    function isAdmin() {
+      return request.auth != null &&
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
+    }
+  }
+}

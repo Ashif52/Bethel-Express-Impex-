@@ -232,65 +232,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- CALCULATOR LOGIC WITH ANIMATION ---
-    const calcForm = document.getElementById('calcForm');
-    if (calcForm) {
-        const inputs = calcForm.querySelectorAll('input, select');
-        const costDisplay = document.getElementById('totalCost');
 
-        const calculate = () => {
-            const h = parseFloat(document.getElementById('calcH')?.value) || 0;
-            const w = parseFloat(document.getElementById('calcW')?.value) || 0;
-            const d = parseFloat(document.getElementById('calcD')?.value) || 0;
-            const weight = parseFloat(document.getElementById('calcWeight')?.value) || 0;
-            const courier = document.getElementById('calcCourier')?.value || 'standard';
-            const destination = document.getElementById('calcDest')?.value || 'domestic';
-            const pkgType = document.getElementById('calcPkg')?.value || 'parcel';
+    // --- OLD CALCULATOR LOGIC REMOVED ---
+    // Calculator is now powered by BethelPricingEngine (pricing-engine.js)
+    // See inline script in index.html and tracking.html
 
-            if (weight === 0 && (h === 0 || w === 0 || d === 0)) {
-                animateCounter(costDisplay, 0);
-                document.getElementById('actualWeightDisplay').textContent = '0';
-                document.getElementById('volWeightDisplay').textContent = '0';
-                return;
-            }
-
-            // Base rates
-            let baseRate = 500;
-            if (pkgType === 'document') baseRate = 300;
-            if (pkgType === 'pharma') baseRate = 800;
-
-            // Courier multiplier
-            let courierMult = 1;
-            if (courier === 'dhl') courierMult = 1.5;
-            if (courier === 'fedex') courierMult = 1.4;
-            if (courier === 'ups') courierMult = 1.3;
-
-            // Destination multiplier
-            let destMult = 1;
-            if (destination === 'usa') destMult = 2.5;
-            if (destination === 'uk') destMult = 2.0;
-            if (destination === 'uae') destMult = 1.5;
-            if (destination === 'singapore') destMult = 1.4;
-
-            // Volumetric calculation
-            const volWeight = (h * w * d) / 5000;
-            const finalWeight = Math.max(weight, volWeight);
-
-            // Update displays
-            document.getElementById('actualWeightDisplay').textContent = weight;
-            document.getElementById('volWeightDisplay').textContent = volWeight.toFixed(2);
-
-            let total = finalWeight * baseRate * courierMult * destMult;
-            if (total === 0 && weight > 0) total = baseRate * destMult;
-
-            animateCounter(costDisplay, Math.round(total));
-        };
-
-        inputs.forEach(input => {
-            input.addEventListener('input', calculate);
-            input.addEventListener('change', calculate);
-        });
-    }
 
     // --- ANIMATED COUNTER ---
     function animateCounter(element, target, duration = 1000) {
@@ -630,6 +576,50 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.body.style.overflow = '';
             });
         });
+    }
+
+
+    // --- WHATSAPP FLOATING WIDGET ---
+    createWhatsAppWidget();
+
+    function createWhatsAppWidget() {
+        // Create Button
+        const floatBtn = document.createElement('a');
+        const message = "Hello Bethel Express, I would like to enquire about your services.";
+        floatBtn.href = `https://wa.me/919566016883?text=${encodeURIComponent(message)}`;
+        floatBtn.className = 'whatsapp-float';
+        floatBtn.target = '_blank';
+        floatBtn.innerHTML = '<i class="fab fa-whatsapp"></i>';
+        document.body.appendChild(floatBtn);
+
+        // Create Bubble
+        const bubble = document.createElement('div');
+        bubble.className = 'whatsapp-bubble';
+        bubble.innerHTML = `
+            <div class="whatsapp-bubble-content">
+                <h4 style="font-weight: 700; margin-bottom: 5px;">Chat with us!</h4>
+                <p style="margin: 0;">Hello! How can we help you with your shipment today?</p>
+            </div>
+            <i class="fas fa-times close-bubble"></i>
+        `;
+        document.body.appendChild(bubble);
+
+        // Close Logic
+        const closeBtn = bubble.querySelector('.close-bubble');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', (e) => {
+                e.preventDefault(); // Prevent bubbling if needed
+                bubble.style.opacity = '0';
+                setTimeout(() => bubble.remove(), 500);
+            });
+        }
+
+        // Show bubble animation handled by CSS keyframes
+        // Ensure visibility after delay
+        setTimeout(() => {
+            bubble.style.opacity = '1';
+            bubble.style.transform = 'translateY(0)';
+        }, 3000);
     }
 
     console.log('✨ Bethel Express Premium Experience Loaded');

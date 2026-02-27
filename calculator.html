@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shipping Calculator | Bethel Express & Impex — International Courier Cost Estimator</title>
+    <link rel="icon" type="image/png" href="assets/images/logo.png">
+    <meta name="description"
+        content="Calculate international shipping costs instantly. Get detailed freight breakdown with GST, fuel surcharge, and per-KG slab pricing for USA, UK, UAE, Australia, Canada and more.">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/calculator.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- Particle Background -->
+    <div id="particles" class="particle-bg"></div>
+
+    <!-- SPLASH SCREEN -->
+    <div id="splash">
+        <div class="route">
+            <span class="parcel"></span>
+        </div>
+        <div class="logo-splash">
+            <h1>BETHEL EXPRESS & IMPEX</h1>
+            <p>Connecting the World, Delivering Excellence</p>
+        </div>
+    </div>
+
+    <header>
+        <div class="container nav-flex">
+            <a href="index.html" class="logo">
+                <img src="assets/images/logo.png" alt="Bethel Express Logo" class="logo-img">
+                <div class="logo-text">
+                    <span class="brand-name">Bethel Express</span>
+                    <span class="brand-tagline">& Impex</span>
+                </div>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="about.html" class="nav-link">About Us</a></li>
+                <li><a href="services.html" class="nav-link">Our Services</a></li>
+                <li><a href="tracking.html" class="nav-link">Track Shipment</a></li>
+                <li><a href="calculator.html" class="nav-link active">Calculator</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+            <div class="mobile-menu-btn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <a href="contact.html" class="btn btn-primary">Request Quote</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Page Banner -->
+        <section class="calc-page-banner" style="background-image: url('assets/images/cargo-truck.jpg');">
+            <div class="container">
+                <div class="calc-banner-content">
+                    <span class="section-tag">Shipping Estimator</span>
+                    <h1>Calculate Your<br><span class="gradient-text">Shipping Cost.</span></h1>
+                    <p>Get an instant breakdown of international courier charges including base freight, fuel
+                        surcharge, and applicable GST.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Calculator Section -->
+        <section class="calc-section">
+            <div class="container">
+                <div class="calc-main-grid">
+                    <!-- LEFT: Calculator Form -->
+                    <div class="calc-form-panel">
+                        <h2 class="calc-form-title">
+                            <i class="fas fa-calculator" style="color: var(--primary-gold); margin-right: 10px;"></i>
+                            Quick Cost Estimator
+                        </h2>
+                        <p class="calc-form-subtitle">Fill in shipment details to get an instant price breakdown.</p>
+
+                        <!-- Error Container -->
+                        <div class="calc-error" id="calcError">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <span class="error-text">Error message here</span>
+                        </div>
+
+                        <!-- Country -->
+                        <div class="calc-field-group">
+                            <label><i class="fas fa-globe"></i> Destination Country</label>
+                            <select id="calcCountry" class="calc-select">
+                                <option value="">— Select Country —</option>
+                                <!-- Populated dynamically by calculator.js -->
+                            </select>
+                        </div>
+
+                        <!-- Shipment Type -->
+                        <div class="calc-field-group">
+                            <label><i class="fas fa-box"></i> Shipment Type</label>
+                        </div>
+                        <div class="calc-type-row">
+                            <div class="calc-type-option">
+                                <input type="radio" name="shipmentType" id="typeDocument" value="document">
+                                <label for="typeDocument">
+                                    <i class="fas fa-file-alt type-icon"></i>
+                                    <span>Document</span>
+                                </label>
+                            </div>
+                            <div class="calc-type-option">
+                                <input type="radio" name="shipmentType" id="typePackage" value="package" checked>
+                                <label for="typePackage">
+                                    <i class="fas fa-box-open type-icon"></i>
+                                    <span>Package</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Hidden select for JS compatibility -->
+                        <select id="calcShipmentType" style="display: none;">
+                            <option value="package" selected>Package</option>
+                            <option value="document">Document</option>
+                        </select>
+
+                        <!-- Weight -->
+                        <div class="calc-field-group">
+                            <label><i class="fas fa-weight-hanging"></i> Weight (KG)</label>
+                            <input type="text" id="calcWeightInput" class="calc-input"
+                                placeholder="Enter weight in kilograms" inputmode="decimal" autocomplete="off">
+                        </div>
+
+                        <!-- Calculate Button -->
+                        <button class="calc-submit-btn" id="calcSubmitBtn">
+                            <i class="fas fa-calculator"></i> Calculate Cost
+                        </button>
+                    </div>
+
+                    <!-- RIGHT: Info Panel -->
+                    <div class="calc-info-panel">
+                        <div class="calc-info-card">
+                            <h3><i class="fas fa-info-circle"></i> How Pricing Works</h3>
+                            <div class="calc-info-item">
+                                <i class="fas fa-layer-group"></i>
+                                <span><strong>Slab-Based Rates:</strong> Per-KG rates are tiered by weight range,
+                                    ensuring
+                                    fair pricing for all shipment sizes.</span>
+                            </div>
+                            <div class="calc-info-item">
+                                <i class="fas fa-gas-pump"></i>
+                                <span><strong>Fuel Surcharge:</strong> Applied as a percentage on the freight cost to
+                                    account for fluctuating fuel prices.</span>
+                            </div>
+                            <div class="calc-info-item">
+                                <i class="fas fa-receipt"></i>
+                                <span><strong>GST:</strong> Goods and Services Tax applied as per government regulations
+                                    on the total service value.</span>
+                            </div>
+                            <div class="calc-info-item">
+                                <i class="fas fa-file-invoice-dollar"></i>
+                                <span><strong>Documents:</strong> Flat-rate pricing for document shipments regardless of
+                                    weight.</span>
+                            </div>
+                        </div>
+
+                        <div class="calc-note-card">
+                            <h4><i class="fas fa-exclamation-triangle"></i> Important Note</h4>
+                            <p>Rates shown are indicative estimates based on standard shipment parameters. Final charges
+                                may vary after pickup and physical inspection. For exact quotes, please
+                                <a href="contact.html" style="color: var(--primary-gold); font-weight: 600;">contact our
+                                    team</a>.
+                            </p>
+                        </div>
+
+                        <div class="calc-note-card">
+                            <h4><i class="fas fa-headset"></i> Need Help?</h4>
+                            <p>Our logistics consultants are available to assist with custom pricing for bulk or
+                                specialized shipments.
+                                <br><br>
+                                <strong>Call:</strong> <a href="tel:+919566016883"
+                                    style="color: var(--primary-gold);">+91 95660 16883</a>
+                                <br>
+                                <strong>Email:</strong> <a href="mailto:bethelexpress5@gmail.com"
+                                    style="color: var(--primary-gold);">bethelexpress5@gmail.com</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Result Breakdown (Hidden by default) -->
+                <div class="calc-result-section" id="calcResultSection">
+                    <div class="calc-result-card">
+                        <!-- Result Header -->
+                        <div class="calc-result-header">
+                            <h3><i class="fas fa-receipt"></i> Cost Breakdown</h3>
+                            <div class="result-meta">
+                                <div class="result-meta-item">
+                                    <span class="meta-label">Destination</span>
+                                    <span class="meta-value" id="resCountry">—</span>
+                                </div>
+                                <div class="result-meta-item">
+                                    <span class="meta-label">Weight</span>
+                                    <span class="meta-value" id="resWeight">—</span>
+                                </div>
+                                <div class="result-meta-item">
+                                    <span class="meta-label">Type</span>
+                                    <span class="meta-value" id="resType">—</span>
+                                </div>
+                                <div class="result-meta-item">
+                                    <span class="meta-label">Slab</span>
+                                    <span class="meta-value" id="resSlab">—</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Result Body -->
+                        <div class="calc-result-body">
+                            <table class="breakdown-table">
+                                <tbody>
+                                    <tr>
+                                        <td><i class="fas fa-truck"></i> Base Freight</td>
+                                        <td id="resBaseFreight">₹ 0.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="fas fa-chart-line"></i> Profit Margin <span class="pct-label"
+                                                id="resProfitPct">(0%)</span></td>
+                                        <td id="resProfit">₹ 0.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="fas fa-gas-pump"></i> Fuel Surcharge <span class="pct-label"
+                                                id="resFuelPct">(0%)</span></td>
+                                        <td id="resFuel">₹ 0.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="fas fa-receipt"></i> GST <span class="pct-label"
+                                                id="resGSTPct">(0%)</span></td>
+                                        <td id="resGST">₹ 0.00</td>
+                                    </tr>
+                                    <tr class="total-row">
+                                        <td><i class="fas fa-coins"></i> Total Payable</td>
+                                        <td id="resTotalPayable">₹ 0.00</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Result Footer -->
+                        <div class="calc-result-footer">
+                            <p>*Final amount subject to physical verification and customs clearance.</p>
+                            <a href="contact.html"><i class="fas fa-paper-plane" style="margin-right: 6px;"></i>Request
+                                Formal Quote</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <!-- Main Footer -->
+        <div class="footer-main">
+            <div class="container">
+                <div class="footer-grid">
+                    <!-- Brand Column -->
+                    <div class="footer-brand">
+                        <div class="footer-logo-wrap">
+                            <img src="assets/images/logo.png" alt="Bethel Express Logo" class="footer-logo-img">
+                            <div class="footer-logo-text">BETHEL<br><span>EXPRESS & IMPEX</span></div>
+                        </div>
+                        <p class="footer-desc">Your premium logistics partner specializing in international courier and
+                            wholesale pharmaceutical distribution. TN Licensed & Globally Strategic.</p>
+                        <div class="footer-certs">
+                            <span class="cert-badge"><i class="fas fa-certificate"></i> TN Licensed</span>
+                            <span class="cert-badge"><i class="fas fa-shield-alt"></i> ISO Certified</span>
+                        </div>
+                        <div class="footer-social">
+                            <a href="https://www.facebook.com/share/1Dpuu2tyJq/" aria-label="Facebook"
+                                target="_blank"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://www.instagram.com/bethel_expressimpex?igsh=NmIxdWNyb240NHVj"
+                                aria-label="Instagram" target="_blank"><i class="fab fa-instagram"></i></a>
+                            <a href="https://wa.me/919566016883?text=Hello%20Bethel%20Express,%20I%20would%20like%20to%20enquire%20about%20your%20services."
+                                aria-label="WhatsApp" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                        </div>
+                    </div>
+
+                    <!-- Quick Links -->
+                    <div>
+                        <h4 class="footer-title">Quick Links</h4>
+                        <ul class="footer-links">
+                            <li><a href="index.html"><i class="fas fa-chevron-right"></i> Home</a></li>
+                            <li><a href="about.html"><i class="fas fa-chevron-right"></i> About Us</a></li>
+                            <li><a href="services.html"><i class="fas fa-chevron-right"></i> Our Services</a></li>
+                            <li><a href="tracking.html"><i class="fas fa-chevron-right"></i> Track Shipment</a></li>
+                            <li><a href="contact.html"><i class="fas fa-chevron-right"></i> Contact</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Services -->
+                    <div>
+                        <h4 class="footer-title">Services</h4>
+                        <ul class="footer-links">
+                            <li><a href="services.html"><i class="fas fa-chevron-right"></i> International Courier</a>
+                            </li>
+                            <li><a href="services.html"><i class="fas fa-chevron-right"></i> Pharma Distribution</a>
+                            </li>
+                            <li><a href="services.html"><i class="fas fa-chevron-right"></i> Custom Logistics</a></li>
+                            <li><a href="services.html"><i class="fas fa-chevron-right"></i> Express Delivery</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Contact Info -->
+                    <div>
+                        <h4 class="footer-title">Contact Us</h4>
+                        <div class="footer-contact-item">
+                            <div class="footer-contact-icon"><i class="fas fa-phone"></i></div>
+                            <div class="footer-contact-text">
+                                <strong>Phone</strong>
+                                <a href="tel:+919566016883">+91 95660 16883</a>
+                            </div>
+                        </div>
+                        <div class="footer-contact-item">
+                            <div class="footer-contact-icon"><i class="fas fa-envelope"></i></div>
+                            <div class="footer-contact-text">
+                                <strong>Email</strong>
+                                <a href="mailto:bethelexpress5@gmail.com">bethelexpress5@gmail.com</a>
+                            </div>
+                        </div>
+                        <div class="footer-contact-item">
+                            <div class="footer-contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+                            <div class="footer-contact-text">
+                                <strong>Address</strong>
+                                Nungambakkam, Chennai, India
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer Bottom -->
+                <div class="footer-bottom">
+                    <p>&copy; 2026 BETHEL EXPRESS & IMPEX. All rights reserved. &nbsp;|&nbsp; Designed by <a
+                            href="https://www.alcas.in/" target="_blank">ALCAS</a></p>
+                    <div class="footer-bottom-links">
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms of Service</a>
+                        <a href="#">Cookie Policy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts: pricing-engine and calculator logic -->
+    <script type="module" src="assets/js/calculator.js"></script>
+    <script src="assets/js/script.js"></script>
+
+    <!-- Sync radio buttons with hidden select for calculator.js -->
+    <script>
+        (function () {
+            var radios = document.querySelectorAll('input[name="shipmentType"]');
+            var hiddenSelect = document.getElementById('calcShipmentType');
+            radios.forEach(function (radio) {
+                radio.addEventListener('change', function () {
+                    if (hiddenSelect) {
+                        hiddenSelect.value = this.value;
+                    }
+                });
+            });
+        })();
+    </script>
+</body>
+
+</html>

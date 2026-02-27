@@ -1,0 +1,1127 @@
+/* 
+   ==========================================================================
+   BETHEL EXPRESS & IMPEX — SHIPPING CALCULATOR & ADMIN STYLES v1.0
+   Professional Logistics Styling — Gold / Black / White / Grey
+   ==========================================================================
+*/
+
+/* =========================================================================
+   CALCULATOR PAGE — PUBLIC
+   ========================================================================= */
+
+/* --- Page Banner --- */
+.calc-page-banner {
+    height: 50vh;
+    min-height: 380px;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    position: relative;
+    display: flex;
+    align-items: center;
+    color: var(--text-white);
+    overflow: hidden;
+}
+
+.calc-page-banner::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(10, 10, 10, 0.88) 0%, rgba(10, 10, 10, 0.5) 50%, rgba(10, 10, 10, 0.3) 100%);
+    z-index: 1;
+}
+
+.calc-page-banner::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 150px;
+    background: linear-gradient(to top, #f8f8f8, transparent);
+    z-index: 1;
+}
+
+.calc-banner-content {
+    position: relative;
+    z-index: 2;
+    max-width: 700px;
+}
+
+.calc-banner-content .section-tag {
+    animation: slideInLeft 0.8s ease forwards;
+    opacity: 0;
+}
+
+.calc-banner-content h1 {
+    font-size: 52px;
+    line-height: 1.15;
+    margin-bottom: 15px;
+    animation: slideInUp 0.8s ease 0.2s forwards;
+    opacity: 0;
+}
+
+.calc-banner-content p {
+    font-size: 17px;
+    color: rgba(255, 255, 255, 0.8);
+    animation: slideInUp 0.8s ease 0.4s forwards;
+    opacity: 0;
+}
+
+/* --- Calculator Section --- */
+.calc-section {
+    padding: 80px 0 120px;
+    background: var(--bg-light);
+}
+
+.calc-main-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+    align-items: start;
+}
+
+/* --- Calculator Form Card --- */
+.calc-form-panel {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 50px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+    position: relative;
+    overflow: hidden;
+}
+
+.calc-form-panel::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(90deg, var(--primary-gold), var(--accent-gold), var(--primary-gold));
+}
+
+.calc-form-title {
+    font-size: 24px;
+    margin-bottom: 8px;
+    color: var(--primary-dark);
+}
+
+.calc-form-subtitle {
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 35px;
+}
+
+.calc-field-group {
+    margin-bottom: 22px;
+}
+
+.calc-field-group label {
+    display: block;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 8px;
+}
+
+.calc-field-group label i {
+    color: var(--primary-gold);
+    margin-right: 6px;
+    width: 14px;
+}
+
+.calc-input,
+.calc-select {
+    width: 100%;
+    padding: 14px 18px;
+    border: 2px solid #e8e8e8;
+    border-radius: 10px;
+    font-size: 15px;
+    font-family: var(--font-body);
+    background: #fafafa;
+    color: var(--primary-dark);
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.calc-input:focus,
+.calc-select:focus {
+    border-color: var(--primary-gold);
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(201, 162, 77, 0.1);
+}
+
+.calc-select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    padding-right: 40px;
+}
+
+.calc-type-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 22px;
+}
+
+.calc-type-option {
+    position: relative;
+}
+
+.calc-type-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.calc-type-option label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    border: 2px solid #e8e8e8;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: #fafafa;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: none;
+    letter-spacing: 0;
+}
+
+.calc-type-option label i.type-icon {
+    font-size: 20px;
+    color: #aaa;
+    transition: all 0.3s ease;
+}
+
+.calc-type-option input[type="radio"]:checked+label {
+    border-color: var(--primary-gold);
+    background: rgba(201, 162, 77, 0.06);
+    box-shadow: 0 0 0 4px rgba(201, 162, 77, 0.1);
+}
+
+.calc-type-option input[type="radio"]:checked+label i.type-icon {
+    color: var(--primary-gold);
+}
+
+.calc-submit-btn {
+    width: 100%;
+    padding: 18px 30px;
+    background: linear-gradient(135deg, var(--primary-gold), var(--accent-gold));
+    color: var(--primary-dark);
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: var(--font-body);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.calc-submit-btn:hover {
+    background: var(--primary-dark);
+    color: var(--primary-gold);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+.calc-submit-btn.btn-loading {
+    pointer-events: none;
+    opacity: 0.85;
+}
+
+/* --- Error Display --- */
+.calc-error {
+    display: none;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    background: #fff5f5;
+    border: 1px solid #fed7d7;
+    border-left: 4px solid #e53e3e;
+    border-radius: 8px;
+    margin-bottom: 22px;
+    font-size: 14px;
+    color: #c53030;
+}
+
+.calc-error i {
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.error-slide-in {
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* --- Info Panel (Right Column) --- */
+.calc-info-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.calc-info-card {
+    background: var(--primary-dark);
+    border-radius: 16px;
+    padding: 45px;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+}
+
+.calc-info-card::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(201, 162, 77, 0.15) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.calc-info-card h3 {
+    font-size: 22px;
+    margin-bottom: 12px;
+    color: #fff;
+}
+
+.calc-info-card h3 i {
+    color: var(--primary-gold);
+    margin-right: 10px;
+}
+
+.calc-info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.calc-info-item:last-child {
+    border-bottom: none;
+}
+
+.calc-info-item i {
+    color: var(--primary-gold);
+    margin-top: 3px;
+    flex-shrink: 0;
+    width: 16px;
+}
+
+.calc-info-item span {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.75);
+    line-height: 1.6;
+}
+
+.calc-note-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 30px;
+    border: 1px solid #eee;
+}
+
+.calc-note-card h4 {
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: var(--primary-dark);
+}
+
+.calc-note-card h4 i {
+    color: var(--primary-gold);
+    margin-right: 8px;
+}
+
+.calc-note-card p {
+    font-size: 13px;
+    color: #888;
+    line-height: 1.7;
+}
+
+/* --- Result Breakdown Section --- */
+.calc-result-section {
+    display: none;
+    margin-top: 50px;
+}
+
+.result-slide-in {
+    animation: resultAppear 0.6s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+}
+
+@keyframes resultAppear {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.calc-result-card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.calc-result-header {
+    background: var(--primary-dark);
+    padding: 35px 45px;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.calc-result-header h3 {
+    font-size: 22px;
+    color: #fff;
+}
+
+.calc-result-header h3 i {
+    color: var(--primary-gold);
+    margin-right: 10px;
+}
+
+.result-meta {
+    display: flex;
+    gap: 25px;
+}
+
+.result-meta-item {
+    text-align: right;
+}
+
+.result-meta-item .meta-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: rgba(255, 255, 255, 0.5);
+    display: block;
+}
+
+.result-meta-item .meta-value {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--primary-gold);
+}
+
+.calc-result-body {
+    padding: 45px;
+}
+
+.breakdown-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.breakdown-table tr {
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.breakdown-table tr:last-child {
+    border-bottom: none;
+}
+
+.breakdown-table td {
+    padding: 16px 0;
+    font-size: 15px;
+    vertical-align: middle;
+}
+
+.breakdown-table td:first-child {
+    color: #666;
+    font-weight: 500;
+}
+
+.breakdown-table td:first-child i {
+    color: var(--primary-gold);
+    width: 20px;
+    margin-right: 10px;
+}
+
+.breakdown-table td:last-child {
+    text-align: right;
+    font-weight: 600;
+    color: var(--primary-dark);
+}
+
+.breakdown-table .pct-label {
+    font-size: 12px;
+    color: #aaa;
+    font-weight: 400;
+    margin-left: 6px;
+}
+
+.breakdown-table .total-row {
+    border-top: 3px solid var(--primary-dark);
+    border-bottom: none;
+}
+
+.breakdown-table .total-row td {
+    padding-top: 22px;
+    padding-bottom: 10px;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.breakdown-table .total-row td:last-child {
+    color: var(--primary-gold);
+    font-size: 24px;
+    font-family: var(--font-heading);
+}
+
+.calc-result-footer {
+    background: #fafafa;
+    padding: 25px 45px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #eee;
+}
+
+.calc-result-footer p {
+    font-size: 12px;
+    color: #999;
+}
+
+.calc-result-footer a {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--primary-gold);
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.calc-result-footer a:hover {
+    color: var(--primary-dark);
+}
+
+
+/* =========================================================================
+   ADMIN PANEL STYLES
+   ========================================================================= */
+
+/* --- Login Overlay --- */
+.admin-login-overlay {
+    position: fixed;
+    inset: 0;
+    background: var(--primary-dark);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.admin-login-card {
+    background: #111;
+    padding: 60px 50px;
+    border-radius: 20px;
+    width: 420px;
+    max-width: 90vw;
+    text-align: center;
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.admin-login-logo {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 20px;
+    background: linear-gradient(135deg, var(--primary-gold), var(--accent-gold));
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: var(--primary-dark);
+}
+
+.admin-login-card h2 {
+    color: #fff;
+    font-size: 26px;
+    margin-bottom: 8px;
+}
+
+.admin-login-card p {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 14px;
+    margin-bottom: 35px;
+}
+
+.admin-login-input {
+    width: 100%;
+    padding: 16px 20px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    font-size: 15px;
+    font-family: var(--font-body);
+    outline: none;
+    transition: all 0.3s ease;
+    margin-bottom: 15px;
+}
+
+.admin-login-input:focus {
+    border-color: var(--primary-gold);
+    box-shadow: 0 0 0 4px rgba(201, 162, 77, 0.15);
+}
+
+.admin-login-input::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.admin-login-btn {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--primary-gold), var(--accent-gold));
+    color: var(--primary-dark);
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: var(--font-body);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.admin-login-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(201, 162, 77, 0.3);
+}
+
+.admin-login-error {
+    display: none;
+    color: #fc8181;
+    font-size: 13px;
+    margin-bottom: 15px;
+    padding: 10px;
+    background: rgba(252, 129, 129, 0.1);
+    border-radius: 6px;
+}
+
+/* --- Admin Dashboard --- */
+.admin-dashboard {
+    display: none;
+    min-height: 100vh;
+    background: #f4f4f5;
+}
+
+.admin-topbar {
+    background: var(--primary-dark);
+    padding: 18px 0;
+    border-bottom: 3px solid var(--primary-gold);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.admin-topbar-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.admin-topbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.admin-topbar-brand i {
+    color: var(--primary-gold);
+    font-size: 22px;
+}
+
+.admin-topbar-brand h2 {
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.admin-topbar-brand h2 span {
+    color: var(--primary-gold);
+}
+
+.admin-topbar-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.admin-btn {
+    padding: 10px 22px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: var(--font-body);
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.admin-btn-gold {
+    background: linear-gradient(135deg, var(--primary-gold), var(--accent-gold));
+    color: var(--primary-dark);
+}
+
+.admin-btn-gold:hover {
+    box-shadow: 0 6px 20px rgba(201, 162, 77, 0.3);
+    transform: translateY(-1px);
+}
+
+.admin-btn-outline {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+.admin-btn-outline:hover {
+    border-color: var(--primary-gold);
+    color: var(--primary-gold);
+}
+
+.admin-btn-danger {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.admin-btn-danger:hover {
+    border-color: #fc8181;
+    color: #fc8181;
+}
+
+/* --- Admin Content Area --- */
+.admin-content {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 30px;
+}
+
+.admin-content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.admin-content-header h3 {
+    font-size: 22px;
+    color: var(--primary-dark);
+}
+
+.admin-content-header h3 i {
+    color: var(--primary-gold);
+    margin-right: 10px;
+}
+
+/* --- Country Cards --- */
+.admin-country-card {
+    background: #fff;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    border: 1px solid #eee;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.admin-country-card:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.admin-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 28px;
+    background: #fafafa;
+    border-bottom: 1px solid #eee;
+}
+
+.admin-card-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.admin-card-title i {
+    color: var(--primary-gold);
+    font-size: 18px;
+}
+
+.country-key-label {
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--primary-dark);
+}
+
+.country-name-label {
+    font-size: 13px;
+    color: #999;
+    padding-left: 8px;
+    border-left: 1px solid #ddd;
+}
+
+.admin-card-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.admin-btn-icon {
+    width: 36px;
+    height: 36px;
+    border: 1px solid #e0e0e0;
+    background: #fff;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    color: #888;
+    font-size: 13px;
+}
+
+.admin-btn-icon:hover {
+    border-color: var(--primary-gold);
+    color: var(--primary-gold);
+}
+
+.admin-delete-btn:hover {
+    border-color: #e53e3e;
+    color: #e53e3e;
+    background: #fff5f5;
+}
+
+/* --- Card Body --- */
+.admin-card-body {
+    padding: 30px 28px;
+}
+
+.admin-field-group {
+    margin-bottom: 18px;
+}
+
+.admin-field-group label {
+    display: block;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    font-weight: 600;
+    color: #666;
+    margin-bottom: 6px;
+}
+
+.admin-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: var(--font-body);
+    transition: all 0.3s ease;
+    outline: none;
+    background: #fafafa;
+}
+
+.admin-input:focus {
+    border-color: var(--primary-gold);
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(201, 162, 77, 0.1);
+}
+
+.admin-section-label {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--primary-dark);
+    margin-top: 25px;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.admin-section-label i {
+    color: var(--primary-gold);
+    margin-right: 8px;
+}
+
+.admin-slabs-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.admin-slab-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 40px;
+    gap: 10px;
+    align-items: center;
+}
+
+.admin-slab-row .admin-input {
+    padding: 10px 14px;
+    font-size: 13px;
+}
+
+.admin-remove-slab-btn {
+    color: #ccc;
+}
+
+.admin-remove-slab-btn:hover {
+    color: #e53e3e;
+    border-color: #e53e3e;
+}
+
+.admin-btn-small {
+    padding: 8px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: var(--font-body);
+    background: transparent;
+    border: 1.5px dashed #ccc;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #888;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.admin-btn-small:hover {
+    border-color: var(--primary-gold);
+    color: var(--primary-gold);
+}
+
+.admin-field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+/* --- Toast Notification --- */
+.admin-toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    padding: 16px 28px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: var(--font-body);
+    z-index: 9999;
+    transform: translateY(120%);
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+}
+
+.admin-toast.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.admin-toast.success {
+    background: #2d7a3a;
+    color: #fff;
+}
+
+.admin-toast.error {
+    background: #c53030;
+    color: #fff;
+}
+
+.admin-toast.warning {
+    background: #b7791f;
+    color: #fff;
+}
+
+
+/* =========================================================================
+   RESPONSIVE — CALCULATOR & ADMIN
+   ========================================================================= */
+
+@media (max-width: 1024px) {
+    .calc-main-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .calc-banner-content h1 {
+        font-size: 40px;
+    }
+
+    .calc-result-header {
+        flex-direction: column;
+        gap: 20px;
+        align-items: flex-start;
+    }
+
+    .result-meta {
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .result-meta-item {
+        text-align: left;
+    }
+
+    .admin-field-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .calc-page-banner {
+        height: auto;
+        min-height: 280px;
+        padding: 120px 0 60px;
+    }
+
+    .calc-banner-content h1 {
+        font-size: 32px;
+    }
+
+    .calc-section {
+        padding: 40px 0 80px;
+    }
+
+    .calc-form-panel {
+        padding: 30px 22px;
+    }
+
+    .calc-type-row {
+        grid-template-columns: 1fr;
+    }
+
+    .calc-result-header {
+        padding: 25px 22px;
+    }
+
+    .calc-result-body {
+        padding: 25px 22px;
+    }
+
+    .calc-result-footer {
+        flex-direction: column;
+        gap: 10px;
+        padding: 20px 22px;
+        text-align: center;
+    }
+
+    .breakdown-table .total-row td:last-child {
+        font-size: 20px;
+    }
+
+    .admin-topbar-inner {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .admin-topbar-actions {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .admin-content {
+        padding: 0 15px;
+        margin: 20px auto;
+    }
+
+    .admin-content-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+
+    .admin-card-header {
+        padding: 15px 18px;
+    }
+
+    .admin-card-body {
+        padding: 20px 18px;
+    }
+
+    .admin-slab-row {
+        grid-template-columns: 1fr 1fr 36px;
+    }
+
+    .admin-login-card {
+        padding: 40px 30px;
+    }
+}
+
+@media (max-width: 480px) {
+    .calc-banner-content h1 {
+        font-size: 26px;
+    }
+
+    .calc-form-panel {
+        padding: 25px 18px;
+    }
+
+    .calc-info-card {
+        padding: 30px 22px;
+    }
+
+    .breakdown-table td {
+        font-size: 13px;
+        padding: 12px 0;
+    }
+
+    .breakdown-table .total-row td:last-child {
+        font-size: 18px;
+    }
+
+    .admin-field-row {
+        gap: 10px;
+    }
+}

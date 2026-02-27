@@ -120,6 +120,44 @@
             border-radius: 12px;
         }
 
+        .calc-input-group {
+            margin-bottom: 20px;
+        }
+
+        .calc-input-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            color: var(--primary-dark);
+        }
+
+        .calc-field,
+        .calc-select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #eee;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 15px;
+            background: #fff;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+
+        .calc-field:focus,
+        .calc-select:focus {
+            outline: none;
+            border-color: var(--primary-gold);
+        }
+
+        .calc-select {
+            cursor: pointer;
+            appearance: auto;
+        }
+
         .calc-dimensions-row {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
@@ -130,6 +168,30 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
+        }
+
+        .calc-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .calc-result-box {
+            background: var(--primary-dark);
+            color: #fff;
+            padding: 50px;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .calc-result-box::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at top right, rgba(201, 162, 77, 0.15) 0%, transparent 60%);
+            pointer-events: none;
         }
 
         /* Partner Cards */
@@ -687,10 +749,10 @@
                         <div class="calc-input-group">
                             <label>Courier</label>
                             <select id="calcCourier" class="calc-select">
-                                <option value="standard">Select Courier</option>
                                 <option value="dhl">DHL Express</option>
                                 <option value="fedex">FedEx Priority</option>
                                 <option value="ups">UPS Worldwide</option>
+                                <option value="aramex">Aramex</option>
                             </select>
                         </div>
 
@@ -703,11 +765,8 @@
                             <div class="calc-input-group">
                                 <label>Destination</label>
                                 <select id="calcDest" class="calc-select">
-                                    <option value="domestic">Select Destination</option>
-                                    <option value="usa">USA</option>
-                                    <option value="uk">United Kingdom</option>
-                                    <option value="uae">United Arab Emirates</option>
-                                    <option value="singapore">Singapore</option>
+                                    <option value="">Select Destination</option>
+                                    <!-- Populated dynamically from pricing engine -->
                                 </select>
                             </div>
                         </div>
@@ -724,25 +783,68 @@
                     </div>
 
                     <div class="calc-result-box reveal stagger-2">
-                        <span class="section-tag" style="color: #fff; opacity: 0.6;">Estimated Total</span>
                         <div
-                            style="margin: 20px 0; font-size: 14px; color: #ddd; display: flex; flex-direction: column; gap: 5px;">
-                            <span>Actual Weight: <strong style="color: #fff;"><span id="actualWeightDisplay">0</span>
-                                    kg</strong></span>
-                            <span>Volumetric Weight: <strong style="color: #fff;"><span id="volWeightDisplay">0</span>
-                                    kg</strong></span>
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <span class="section-tag" style="color: #fff; opacity: 0.6; margin-bottom: 0;">ESTIMATED
+                                QUOTE</span>
+                            <span id="liveBadge"
+                                style="font-size: 10px; background: rgba(0,255,0,0.2); color: #00ff00; padding: 4px 8px; border-radius: 4px; display: none;">
+                                <i class="fas fa-circle" style="font-size: 8px; margin-right: 5px;"></i> LIVE SYNC
+                            </span>
                         </div>
-                        <h4 style="margin: 20px 0 10px; position: relative; z-index: 1;">Total Cost:</h4>
-                        <h2>Rs. <span id="totalCost">0</span></h2>
+
+                        <div
+                            style="margin: 20px 0; font-size: 14px; color: #ddd; display: flex; flex-direction: column; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px;">
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>Actual Weight:</span>
+                                <strong><span id="actualWeightDisplay">0</span> kg</strong>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>Volumetric Weight:</span>
+                                <strong><span id="volWeightDisplay">0</span> kg</strong>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; color: var(--primary-gold);">
+                                <span>Billable Weight:</span>
+                                <strong><span id="billableWeightDisplay">0</span> kg</strong>
+                            </div>
+                        </div>
+
+                        <!-- Detailed Breakdown (Admin Synced) -->
+                        <div id="breakdownSection"
+                            style="margin: 20px 0; font-size: 13px; color: #bbb; display: none; flex-direction: column; gap: 8px;">
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>Base Freight:</span>
+                                <span id="resBaseFreight">₹ 0.00</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>Fuel Surcharge:</span>
+                                <span id="resFuel">₹ 0.00</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>GST:</span>
+                                <span id="resGST">₹ 0.00</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; color: #4caf50;">
+                                <span>Profit:</span>
+                                <span id="resProfit">₹ 0.00</span>
+                            </div>
+                        </div>
+
+                        <h4
+                            style="margin: 20px 0 10px; position: relative; z-index: 1; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
+                            Total Cost:</h4>
+                        <h2 style="font-size: 48px; margin-bottom: 10px;">Rs. <span id="totalCost">0</span></h2>
+
                         <p
-                            style="font-size: 13px; color: var(--text-grey); margin-top: 30px; position: relative; z-index: 1;">
-                            *Rates are indicative based on standard weight/volumetric weight. Final charges may vary
-                            after pickup and inspection.
+                            style="font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 20px; position: relative; z-index: 1; line-height: 1.4;">
+                            *This estimate is dynamically pulled from our Admin Control Panel. Final charges may vary
+                            based on actual pickup dimensions.
                         </p>
                         <a href="contact.html" class="btn btn-primary" style="margin-top: 40px;">
                             <i class="fas fa-paper-plane" style="margin-right: 10px;"></i> Propose Booking
                         </a>
                     </div>
+
                 </div>
             </div>
         </section>
@@ -854,8 +956,8 @@
                             <!-- <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a> -->
                             <a href="https://www.instagram.com/bethel_expressimpex?igsh=NmIxdWNyb240NHVj"
                                 aria-label="Instagram" target="_blank"><i class="fab fa-instagram"></i></a>
-                            <a href="https://wa.me/919566016883" aria-label="WhatsApp" target="_blank"><i
-                                    class="fab fa-whatsapp"></i></a>
+                            <a href="https://wa.me/919566016883?text=Hello%20Bethel%20Express,%20I%20would%20like%20to%20enquire%20about%20your%20services."
+                                aria-label="WhatsApp" target="_blank"><i class="fab fa-whatsapp"></i></a>
                         </div>
                     </div>
 
@@ -925,6 +1027,103 @@
         </div>
     </footer>
 
+    <script type="module">
+        import { initRealTimePricing, calculateShippingCost } from "./pricing-engine.js";
+
+        (async function () {
+            'use strict';
+
+            // ---- CACHE ELEMENTS ----
+            const hField = document.getElementById('calcH');
+            const wField = document.getElementById('calcW');
+            const dField = document.getElementById('calcD');
+            const weightField = document.getElementById('calcWeight');
+            const courierSelect = document.getElementById('calcCourier');
+            const destSelect = document.getElementById('calcDest');
+            const pkgSelect = document.getElementById('calcPkg');
+            const actualWeightDisplay = document.getElementById('actualWeightDisplay');
+            const volWeightDisplay = document.getElementById('volWeightDisplay');
+            const billableWeightDisplay = document.getElementById('billableWeightDisplay');
+            const totalCostDisplay = document.getElementById('totalCost');
+            const breakdownSection = document.getElementById('breakdownSection');
+            const liveBadge = document.getElementById('liveBadge');
+
+            if (!destSelect || !weightField) return;
+
+            // ---- REACTIVE SYNC WITH FIREBASE ----
+            // This is the "Magic" part: any change in Admin reflects here LIVE
+            initRealTimePricing(({ countries }) => {
+                const currentSelected = destSelect.value;
+                destSelect.innerHTML = '<option value="">Select Destination</option>';
+                countries.forEach(country => {
+                    const opt = document.createElement('option');
+                    opt.value = country.key;
+                    opt.textContent = country.label;
+                    destSelect.appendChild(opt);
+                });
+                // Preserve selection if it still exists
+                destSelect.value = currentSelected;
+
+                // Show "Live" status once connected
+                if (liveBadge) liveBadge.style.display = 'inline-flex';
+
+                // Re-calculate if something was already selected
+                if (currentSelected) calculate();
+            });
+
+            // ---- CALCULATE ON ANY INPUT CHANGE ----
+            async function calculate() {
+                const h = parseFloat(hField ? hField.value : 0) || 0;
+                const w = parseFloat(wField ? wField.value : 0) || 0;
+                const d = parseFloat(dField ? dField.value : 0) || 0;
+                const actualWeight = parseFloat(weightField.value) || 0;
+                const courier = courierSelect ? courierSelect.value : 'dhl';
+                const dest = destSelect.value;
+                const pkgType = pkgSelect ? pkgSelect.value : 'parcel';
+
+                const volWeight = (h * w * d) / 5000;
+                const billableWeight = Math.max(actualWeight, volWeight);
+
+                if (actualWeightDisplay) actualWeightDisplay.textContent = actualWeight.toFixed(1);
+                if (volWeightDisplay) volWeightDisplay.textContent = volWeight.toFixed(1);
+                if (billableWeightDisplay) billableWeightDisplay.textContent = billableWeight.toFixed(1);
+
+                if (!dest || billableWeight <= 0) {
+                    if (totalCostDisplay) totalCostDisplay.textContent = '0';
+                    if (breakdownSection) breakdownSection.style.display = 'none';
+                    return;
+                }
+
+                const result = await calculateShippingCost({
+                    country: dest,
+                    shipmentType: (pkgType === 'document') ? 'document' : 'package',
+                    weight: billableWeight,
+                    courier: courier
+                });
+
+                if (!result.success || !result.breakdown) {
+                    if (totalCostDisplay) totalCostDisplay.textContent = '0';
+                    return;
+                }
+
+                const data = result.breakdown;
+
+                // Update UI Breakdown — directly from pricing engine
+                if (breakdownSection) {
+                    breakdownSection.style.display = 'flex';
+                    document.getElementById('resBaseFreight').textContent = `₹ ${data.baseFreight.toLocaleString()}`;
+                    document.getElementById('resFuel').textContent = `₹ ${data.fuelAmount.toLocaleString()}`;
+                    document.getElementById('resGST').textContent = `₹ ${data.gstAmount.toLocaleString()}`;
+                    document.getElementById('resProfit').textContent = `₹ ${data.profitAmount.toLocaleString()}`;
+                }
+
+                if (totalCostDisplay) totalCostDisplay.textContent = Math.round(data.totalPayable).toLocaleString('en-IN');
+            }
+
+            [hField, wField, dField, weightField].forEach(el => el && el.addEventListener('input', calculate));
+            [courierSelect, destSelect, pkgSelect].forEach(el => el && el.addEventListener('change', calculate));
+        })();
+    </script>
     <script src="assets/js/script.js"></script>
 </body>
 
