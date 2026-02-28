@@ -1,434 +1,267 @@
-/**
- * ============================================================================
- * BETHEL EXPRESS & IMPEX — ADMIN PANEL v1.0
- * ============================================================================
- * 
- * Secure admin panel for managing pricing configuration.
- * Uses SHA-256 hashed password comparison.
- * Login state tracked via sessionStorage.
- * 
- * Depends on: pricing-engine.js (BethelPricingEngine)
- * 
- * @author Bethel Express & Impex
- * @version 1.0.0
- */
+import {
+    collection,
+    onSnapshot,
+    getDocs,
+    setDoc,
+    updateDoc,
+    deleteDoc,
+    doc,
+    query,
+    orderBy
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { db } from "./firebase-config.js";
+import { login, logout, observeAuthState } from "./auth.js";
+import { formatCurrency } from "./pricing-engine.js";
 
-'use strict';
+// DOM Elements
+const loginOverlay = document.getElementById('adminLoginOverlay');
+const loginForm = document.getElementById('adminLoginForm');
+const loginError = document.getElementById('adminLoginError');
+const dashboard = document.getElementById('adminDashboard');
+const countryList = document.getElementById('adminCountryList');
+const logoutBtn = document.getElementById('adminLogoutBtn');
+const addCountryBtn = document.getElementById('addCountryBtn');
 
-document.addEventListener('DOMContentLoaded', function () {
+// Courier definitions
+const COURIERS = [
+    { key: 'dhl', label: 'DHL Express', icon: 'fa-shipping-fast' },
+    { key: 'fedex', label: 'FedEx Priority', icon: 'fa-plane' },
+    { key: 'ups', label: 'UPS Worldwide', icon: 'fa-box' },
+    { key: 'aramex', label: 'Aramex', icon: 'fa-truck' }
+];
 
-    // =========================================================================
-    // SECURITY — SHA-256 PASSWORD HASH
-    // Pre-computed SHA-256 hash of the admin password: "BethelAdmin@2026"
-    // To change password, compute SHA-256 of new password and replace this hash.
-    // =========================================================================
-    const ADMIN_PASSWORD_HASH = 'a3c9e8f7b2d1e4a5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9';
-    const SESSION_KEY = 'bethel_admin_session';
+// Fetch and Render Rates (Real-Time)
+function loadRates() {
+    countryList.innerHTML = '<div class="loading">Syncing with database...</div>';
 
-    // =========================================================================
-    // ASYNC SHA-256 HASH FUNCTION
-    // =========================================================================
-    async function sha256(message) {
-        const msgBuffer = new TextEncoder().encode(message);
-        const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-        const hashArray = Array.from(new Uint8Array(hashBuffer));
-        return hashArray.map(function (b) { return b.toString(16).padStart(2, '0'); }).join('');
-    }
-
-    // =========================================================================
-    // SIMPLE OBFUSCATED PASSWORD CHECK (Frontend-only fallback)
-    // Uses btoa/atob to obfuscate the password comparison
-    // The stored value = btoa("BethelAdmin@2026")
-    // =========================================================================
-    const _k = 'QmV0aGVsQWRtaW5AMjAyNg=='; // btoa("BethelAdmin@2026")
-
-    function verifyPassword(input) {
-        try {
-            return btoa(input) === _k;
-        } catch (e) {
-            return false;
-        }
-    }
-
-    // =========================================================================
-    // DOM REFERENCES
-    // =========================================================================
-    const loginOverlay = document.getElementById('adminLoginOverlay');
-    const loginForm = document.getElementById('adminLoginForm');
-    const loginPasswordInput = document.getElementById('adminPassword');
-    const loginError = document.getElementById('adminLoginError');
-    const adminDashboard = document.getElementById('adminDashboard');
-    const logoutBtn = document.getElementById('adminLogoutBtn');
-    const countryListContainer = document.getElementById('adminCountryList');
-    const addCountryBtn = document.getElementById('addCountryBtn');
-    const resetDefaultsBtn = document.getElementById('resetDefaultsBtn');
-    const saveAllBtn = document.getElementById('saveAllChangesBtn');
-    const adminToast = document.getElementById('adminToast');
-
-    // =========================================================================
-    // SESSION MANAGEMENT
-    // =========================================================================
-    function checkSession() {
-        const session = sessionStorage.getItem(SESSION_KEY);
-        if (session === 'authenticated') {
-            showDashboard();
-        } else {
-            showLogin();
-        }
-    }
-
-    function showLogin() {
-        if (loginOverlay) loginOverlay.style.display = 'flex';
-        if (adminDashboard) adminDashboard.style.display = 'none';
-    }
-
-    function showDashboard() {
-        if (loginOverlay) loginOverlay.style.display = 'none';
-        if (adminDashboard) adminDashboard.style.display = 'block';
-        BethelPricingEngine.initStorage();
-        renderCountryList();
-    }
-
-    // =========================================================================
-    // LOGIN HANDLER
-    // =========================================================================
-    if (loginForm) {
-        loginForm.addEventListener('submit', function (e) {
-            e.preventDefault();
-            const password = loginPasswordInput ? loginPasswordInput.value : '';
-
-            if (verifyPassword(password)) {
-                sessionStorage.setItem(SESSION_KEY, 'authenticated');
-                if (loginError) loginError.style.display = 'none';
-                showDashboard();
-            } else {
-                if (loginError) {
-                    loginError.style.display = 'block';
-                    loginError.textContent = 'Invalid password. Access denied.';
-                }
-                if (loginPasswordInput) {
-                    loginPasswordInput.value = '';
-                    loginPasswordInput.focus();
-                }
-            }
+    return onSnapshot(collection(db, "rates"), (querySnapshot) => {
+        countryList.innerHTML = '';
+        querySnapshot.forEach((docSnap) => {
+            renderCountryCard(docSnap.id, docSnap.data());
         });
-    }
-
-    // =========================================================================
-    // LOGOUT
-    // =========================================================================
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', function () {
-            sessionStorage.removeItem(SESSION_KEY);
-            showLogin();
-            if (loginPasswordInput) loginPasswordInput.value = '';
-        });
-    }
-
-    // =========================================================================
-    // RENDER COUNTRY LIST
-    // =========================================================================
-    function renderCountryList() {
-        if (!countryListContainer) return;
-
-        const rates = BethelPricingEngine.getAllRates();
-        countryListContainer.innerHTML = '';
-
-        Object.keys(rates).forEach(function (countryKey) {
-            const country = rates[countryKey];
-            const card = createCountryCard(countryKey, country);
-            countryListContainer.appendChild(card);
-        });
-    }
-
-    // =========================================================================
-    // CREATE COUNTRY CARD
-    // =========================================================================
-    function createCountryCard(countryKey, countryData) {
-        const card = document.createElement('div');
-        card.className = 'admin-country-card';
-        card.setAttribute('data-country', countryKey);
-
-        // Header
-        const header = document.createElement('div');
-        header.className = 'admin-card-header';
-        header.innerHTML = `
-            <div class="admin-card-title">
-                <i class="fas fa-globe"></i>
-                <span class="country-key-label">${countryKey}</span>
-                <span class="country-name-label">${countryData.label || countryKey}</span>
-            </div>
-            <div class="admin-card-actions">
-                <button class="admin-btn-icon admin-toggle-btn" title="Expand/Collapse" data-country="${countryKey}">
-                    <i class="fas fa-chevron-down"></i>
-                </button>
-                <button class="admin-btn-icon admin-delete-btn" title="Delete Country" data-country="${countryKey}">
-                    <i class="fas fa-trash-alt"></i>
-                </button>
-            </div>
-        `;
-
-        // Body (collapsible)
-        const body = document.createElement('div');
-        body.className = 'admin-card-body';
-        body.id = 'adminBody_' + countryKey;
-        body.style.display = 'none';
-
-        // Country Label
-        body.innerHTML = `
-            <div class="admin-field-group">
-                <label>Display Label</label>
-                <input type="text" class="admin-input" data-field="label" value="${countryData.label || ''}" placeholder="e.g. United States">
-            </div>
-
-            <div class="admin-section-label"><i class="fas fa-layer-group"></i> Slab Rates (Per KG in ₹)</div>
-            <div class="admin-slabs-container" id="slabs_${countryKey}">
-                ${renderSlabInputs(countryData.slabs)}
-            </div>
-            <button class="admin-btn-small admin-add-slab-btn" data-country="${countryKey}">
-                <i class="fas fa-plus"></i> Add Slab
-            </button>
-
-            <div class="admin-field-row admin-percentages">
-                <div class="admin-field-group">
-                    <label>Fuel Surcharge (%)</label>
-                    <input type="number" class="admin-input" data-field="fuel" value="${countryData.fuel || 0}" min="0" max="100" step="0.1">
-                </div>
-                <div class="admin-field-group">
-                    <label>GST (%)</label>
-                    <input type="number" class="admin-input" data-field="gst" value="${countryData.gst || 0}" min="0" max="100" step="0.1">
-                </div>
-                <div class="admin-field-group">
-                    <label>Profit Margin (%)</label>
-                    <input type="number" class="admin-input" data-field="profit" value="${countryData.profit || 0}" min="0" max="100" step="0.1">
-                </div>
-            </div>
-
-            <div class="admin-field-group">
-                <label>Document Rate (Flat ₹)</label>
-                <input type="number" class="admin-input" data-field="documentRate" value="${countryData.documentRate || 0}" min="0" step="1">
-            </div>
-        `;
-
-        card.appendChild(header);
-        card.appendChild(body);
-
-        // Event: Toggle expand/collapse
-        const toggleBtn = header.querySelector('.admin-toggle-btn');
-        if (toggleBtn) {
-            toggleBtn.addEventListener('click', function () {
-                const bodyEl = document.getElementById('adminBody_' + countryKey);
-                const icon = this.querySelector('i');
-                if (bodyEl.style.display === 'none') {
-                    bodyEl.style.display = 'block';
-                    icon.className = 'fas fa-chevron-up';
-                } else {
-                    bodyEl.style.display = 'none';
-                    icon.className = 'fas fa-chevron-down';
-                }
-            });
+        if (querySnapshot.empty) {
+            countryList.innerHTML = '<div class="info">No countries configured. Add your first country above.</div>';
         }
+    }, (error) => {
+        console.error("Link error:", error);
+        countryList.innerHTML = '<div class="error">Access denied. Check Firestore security rules.</div>';
+    });
+}
 
-        // Event: Delete country
-        const deleteBtn = header.querySelector('.admin-delete-btn');
-        if (deleteBtn) {
-            deleteBtn.addEventListener('click', function () {
-                const key = this.getAttribute('data-country');
-                if (confirm('Are you sure you want to delete ' + key + '? This action cannot be undone.')) {
-                    BethelPricingEngine.deleteCountry(key);
-                    renderCountryList();
-                    showToast('Country "' + key + '" deleted successfully.', 'warning');
-                }
-            });
-        }
+function renderCountryCard(id, data) {
+    const card = document.createElement('div');
+    card.className = 'admin-country-card';
+    card.id = `card-${id}`;
 
-        // Event: Add slab
-        const addSlabBtn = body.querySelector('.admin-add-slab-btn');
-        if (addSlabBtn) {
-            addSlabBtn.addEventListener('click', function () {
-                const key = this.getAttribute('data-country');
-                const container = document.getElementById('slabs_' + key);
-                if (container) {
-                    const slabRow = document.createElement('div');
-                    slabRow.className = 'admin-slab-row';
-                    slabRow.innerHTML = `
-                        <input type="text" class="admin-input slab-range" placeholder="e.g. 45+" value="">
-                        <input type="number" class="admin-input slab-rate" placeholder="Rate ₹" value="" min="0">
-                        <button class="admin-btn-icon admin-remove-slab-btn" title="Remove Slab">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    `;
-                    container.appendChild(slabRow);
-                    attachRemoveSlabEvent(slabRow);
-                }
-            });
-        }
+    const couriers = data.couriers || {};
 
-        // Attach remove events to existing slabs
-        const existingRemoveBtns = body.querySelectorAll('.admin-remove-slab-btn');
-        existingRemoveBtns.forEach(function (btn) {
-            attachRemoveSlabEvent(btn.closest('.admin-slab-row'));
-        });
+    // Build courier sections
+    let couriersHtml = '';
+    COURIERS.forEach(courier => {
+        const cData = couriers[courier.key] || { baseFreight: 0, slabs: {} };
 
-        return card;
-    }
-
-    // =========================================================================
-    // SLAB INPUT RENDERING
-    // =========================================================================
-    function renderSlabInputs(slabs) {
-        if (!slabs || typeof slabs !== 'object') return '';
-
-        let html = '';
-        Object.entries(slabs).forEach(function ([range, rate]) {
-            html += `
-                <div class="admin-slab-row">
-                    <input type="text" class="admin-input slab-range" value="${range}" placeholder="e.g. 0-10">
-                    <input type="number" class="admin-input slab-rate" value="${rate}" placeholder="Rate ₹" min="0">
-                    <button class="admin-btn-icon admin-remove-slab-btn" title="Remove Slab">
-                        <i class="fas fa-times"></i>
-                    </button>
+        let slabsHtml = '';
+        const sortedSlabs = Object.keys(cData.slabs || {}).sort((a, b) => parseInt(a) - parseInt(b));
+        sortedSlabs.forEach(slab => {
+            slabsHtml += `
+                <div class="slab-row">
+                    <input type="text" value="${slab}" class="slab-key" placeholder="e.g. 0-10">
+                    <input type="number" value="${cData.slabs[slab]}" class="slab-value">
+                    <button class="remove-slab-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
                 </div>
             `;
         });
-        return html;
-    }
 
-    function attachRemoveSlabEvent(slabRow) {
-        if (!slabRow) return;
-        const removeBtn = slabRow.querySelector('.admin-remove-slab-btn');
-        if (removeBtn) {
-            removeBtn.addEventListener('click', function () {
-                slabRow.remove();
-            });
+        couriersHtml += `
+            <div class="courier-section" data-courier="${courier.key}">
+                <div class="courier-header">
+                    <i class="fas ${courier.icon}"></i>
+                    <span>${courier.label}</span>
+                </div>
+                <div class="courier-base-group">
+                    <div class="config-item">
+                        <label>Base Freight — Documents (₹)</label>
+                        <input type="number" value="${cData.baseFreight || 0}" class="courier-base-input">
+                    </div>
+                </div>
+                <div class="slabs-section">
+                    <h4 style="font-size:13px; margin-bottom:10px;">Weight Slabs (Packages)</h4>
+                    <div class="slabs-container" data-courier="${courier.key}">
+                        ${slabsHtml}
+                    </div>
+                    <button class="add-slab-btn" data-courier="${courier.key}"><i class="fas fa-plus"></i> Add Slab</button>
+                </div>
+            </div>
+        `;
+    });
+
+    card.innerHTML = `
+        <div class="card-header">
+            <h3><input type="text" value="${data.label || id}" class="country-label-input"></h3>
+            <div class="card-actions">
+                <button class="save-btn" data-id="${id}"><i class="fas fa-save"></i> Save</button>
+                <button class="delete-btn" data-id="${id}"><i class="fas fa-trash"></i></button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="config-grid" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="config-item">
+                    <label>Fuel Surcharge (%)</label>
+                    <input type="number" value="${data.fuel || 0}" class="fuel-input">
+                </div>
+                <div class="config-item">
+                    <label>GST (%)</label>
+                    <input type="number" value="${data.gst || 0}" class="gst-input">
+                </div>
+                <div class="config-item">
+                    <label>Profit Margin (%)</label>
+                    <input type="number" value="${data.profit || 0}" class="profit-input">
+                </div>
+            </div>
+
+            <div class="couriers-container">
+                ${couriersHtml}
+            </div>
+        </div>
+    `;
+
+    // Event Listeners — Add Slab for each courier
+    card.querySelectorAll('.add-slab-btn').forEach(btn => {
+        btn.onclick = () => {
+            const courierKey = btn.dataset.courier;
+            const container = card.querySelector(`.slabs-container[data-courier="${courierKey}"]`);
+            const div = document.createElement('div');
+            div.className = 'slab-row';
+            div.innerHTML = `
+                <input type="text" placeholder="e.g. 45+" class="slab-key">
+                <input type="number" placeholder="Rate" class="slab-value">
+                <button class="remove-slab-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
+            `;
+            container.appendChild(div);
+        };
+    });
+
+    card.querySelector('.save-btn').onclick = () => saveCountry(id, card);
+    card.querySelector('.delete-btn').onclick = () => deleteCountry(id);
+
+    countryList.appendChild(card);
+}
+
+async function saveCountry(id, card) {
+    const label = card.querySelector('.country-label-input').value;
+    const fuel = parseFloat(card.querySelector('.fuel-input').value) || 0;
+    const gst = parseFloat(card.querySelector('.gst-input').value) || 0;
+    const profit = parseFloat(card.querySelector('.profit-input').value) || 0;
+
+    // Collect per-courier data
+    const couriers = {};
+    card.querySelectorAll('.courier-section').forEach(section => {
+        const courierKey = section.dataset.courier;
+        const baseFreight = parseFloat(section.querySelector('.courier-base-input').value) || 0;
+
+        const slabs = {};
+        section.querySelectorAll('.slab-row').forEach(row => {
+            const key = row.querySelector('.slab-key').value;
+            const val = parseFloat(row.querySelector('.slab-value').value);
+            if (key && !isNaN(val)) slabs[key] = val;
+        });
+
+        couriers[courierKey] = { baseFreight, slabs };
+    });
+
+    const payload = { label, fuel, gst, profit, couriers };
+
+    try {
+        await setDoc(doc(db, "rates", id), payload);
+        showToast("Changes saved successfully!");
+    } catch (error) {
+        console.error("Save error:", error);
+        alert("Permission denied. You must be an admin to update rates.");
+    }
+}
+
+async function deleteCountry(id) {
+    if (!confirm(`Are you sure you want to delete ${id}?`)) return;
+
+    try {
+        await deleteDoc(doc(db, "rates", id));
+        document.getElementById(`card-${id}`).remove();
+        showToast("Country deleted.");
+    } catch (error) {
+        alert("Operation failed.");
+    }
+}
+
+addCountryBtn.onclick = () => {
+    const id = prompt("Enter Country ID (e.g. CANADA, GERMANY):");
+    if (!id) return;
+    const idClean = id.toUpperCase().trim();
+    if (document.getElementById(`card-${idClean}`)) {
+        alert("Country already exists.");
+        return;
+    }
+    const emptyCouriers = {};
+    COURIERS.forEach(c => { emptyCouriers[c.key] = { baseFreight: 0, slabs: { '0-10': 0, '45+': 0 } }; });
+    renderCountryCard(idClean, { label: id, fuel: 0, gst: 18, profit: 10, couriers: emptyCouriers });
+};
+
+function showToast(msg) {
+    const toast = document.getElementById('adminToast');
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+// initialization
+const loginSubmitBtn = document.getElementById('loginSubmitBtn');
+const emailInput = document.getElementById('adminEmail');
+const passwordInput = document.getElementById('adminPassword');
+
+async function handleLogin() {
+    const email = emailInput.value;
+    const password = passwordInput.value;
+
+    loginError.textContent = "Authenticating...";
+
+    try {
+        const result = await login(email, password);
+        if (!result.success) {
+            loginError.textContent = result.error;
+        } else {
+            loginError.textContent = "";
         }
+    } catch (err) {
+        console.error("Critical login error:", err);
+        loginError.textContent = "System error. Check console.";
     }
+}
 
-    // =========================================================================
-    // SAVE ALL CHANGES
-    // =========================================================================
-    if (saveAllBtn) {
-        saveAllBtn.addEventListener('click', function () {
-            const cards = countryListContainer.querySelectorAll('.admin-country-card');
-            const newRates = {};
-            let hasErrors = false;
+if (loginSubmitBtn) {
+    loginSubmitBtn.addEventListener('click', handleLogin);
+}
 
-            cards.forEach(function (card) {
-                const countryKey = card.getAttribute('data-country');
-                const body = card.querySelector('.admin-card-body');
-                if (!body) return;
-
-                // Extract field values
-                const label = body.querySelector('[data-field="label"]').value.trim();
-                const fuel = parseFloat(body.querySelector('[data-field="fuel"]').value) || 0;
-                const gst = parseFloat(body.querySelector('[data-field="gst"]').value) || 0;
-                const profit = parseFloat(body.querySelector('[data-field="profit"]').value) || 0;
-                const documentRate = parseFloat(body.querySelector('[data-field="documentRate"]').value) || 0;
-
-                // Extract slabs
-                const slabs = {};
-                const slabRows = body.querySelectorAll('.admin-slab-row');
-                slabRows.forEach(function (row) {
-                    const range = row.querySelector('.slab-range').value.trim();
-                    const rate = parseFloat(row.querySelector('.slab-rate').value) || 0;
-                    if (range) {
-                        slabs[range] = rate;
-                    }
-                });
-
-                const countryData = {
-                    label: label,
-                    slabs: slabs,
-                    fuel: fuel,
-                    gst: gst,
-                    profit: profit,
-                    documentRate: documentRate
-                };
-
-                // Validate
-                const validation = BethelPricingEngine.validateCountryConfig(countryData);
-                if (!validation.valid) {
-                    hasErrors = true;
-                    showToast('Errors in ' + countryKey + ': ' + validation.errors.join(', '), 'error');
-                }
-
-                newRates[countryKey] = countryData;
-            });
-
-            if (!hasErrors) {
-                BethelPricingEngine.saveAllRates(newRates);
-                showToast('All changes saved successfully!', 'success');
+[emailInput, passwordInput].forEach(el => {
+    if (el) {
+        el.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                handleLogin();
             }
         });
     }
+});
 
-    // =========================================================================
-    // ADD NEW COUNTRY
-    // =========================================================================
-    if (addCountryBtn) {
-        addCountryBtn.addEventListener('click', function () {
-            const countryKey = prompt('Enter a unique Country Code (e.g. "Germany", "Japan"):');
-            if (!countryKey || countryKey.trim() === '') return;
+if (logoutBtn) {
+    logoutBtn.addEventListener('click', logout);
+}
 
-            const key = countryKey.trim().replace(/\s+/g, '_');
-            const existingRates = BethelPricingEngine.getAllRates();
-
-            if (existingRates[key]) {
-                showToast('Country "' + key + '" already exists!', 'error');
-                return;
-            }
-
-            const newCountryData = {
-                label: countryKey.trim(),
-                slabs: { '0-10': 0, '11-20': 0, '21-44': 0, '45+': 0 },
-                fuel: 0,
-                gst: 18,
-                profit: 10,
-                documentRate: 0
-            };
-
-            BethelPricingEngine.saveCountryRates(key, newCountryData);
-            renderCountryList();
-            showToast('Country "' + key + '" added! Configure rates and save.', 'success');
-
-            // Auto-expand the new card
-            setTimeout(function () {
-                const newBody = document.getElementById('adminBody_' + key);
-                if (newBody) newBody.style.display = 'block';
-            }, 100);
-        });
+observeAuthState((user) => {
+    if (user) {
+        if (loginOverlay) loginOverlay.style.display = 'none';
+        if (dashboard) dashboard.style.display = 'block';
+        loadRates();
+    } else {
+        if (loginOverlay) loginOverlay.style.display = 'flex';
+        if (dashboard) dashboard.style.display = 'none';
     }
-
-    // =========================================================================
-    // RESET TO DEFAULTS
-    // =========================================================================
-    if (resetDefaultsBtn) {
-        resetDefaultsBtn.addEventListener('click', function () {
-            if (confirm('This will reset ALL country rates to factory defaults. Continue?')) {
-                BethelPricingEngine.resetToDefaults();
-                renderCountryList();
-                showToast('All rates reset to defaults.', 'warning');
-            }
-        });
-    }
-
-    // =========================================================================
-    // TOAST NOTIFICATION
-    // =========================================================================
-    function showToast(message, type) {
-        if (!adminToast) return;
-
-        adminToast.textContent = message;
-        adminToast.className = 'admin-toast show ' + (type || 'success');
-
-        setTimeout(function () {
-            adminToast.classList.remove('show');
-        }, 3500);
-    }
-
-    // =========================================================================
-    // INITIALIZE
-    // =========================================================================
-    checkSession();
-
 });

@@ -7,9 +7,71 @@
     <title>Bethel Express & Impex | Global Logistics & Pharma Distribution</title>
     <link rel="icon" type="image/png" href="assets/images/logo.png">
     <meta name="description"
-        content="Premium international courier services and TN licensed pharmaceutical wholesale distribution. Connecting India to the world since 2016.">
+        content="Bethel Express & Impex: Leading international courier services in Chennai. Specialized in DHL, FedEx, UPS shipping, and TN licensed pharmaceutical distribution. Global shipping from India since 2016.">
+    <meta name="keywords"
+        content="International Courier Chennai, DHL Courier Chennai, FedEx Courier Chennai, UPS Courier Chennai, Pharmaceutical Distribution Tamil Nadu, Shipping from India to USA, Best International Shipping Chennai, Logistics Company Chennai">
+    <meta name="author" content="Bethel Express & Impex">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://bethelexpressimpex.com/">
+    <meta property="og:title" content="Bethel Express & Impex | Global Logistics & Pharma Distribution">
+    <meta property="og:description"
+        content="Premium international courier services and TN licensed pharmaceutical wholesale distribution. Connecting India to the world.">
+    <meta property="og:image" content="https://bethelexpressimpex.com/assets/images/logo.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://bethelexpressimpex.com/">
+    <meta property="twitter:title" content="Bethel Express & Impex | Global Logistics & Pharma Distribution">
+    <meta property="twitter:description"
+        content="Premium international courier services and TN licensed pharmaceutical wholesale distribution. Connecting India to the world.">
+    <meta property="twitter:image" content="https://bethelexpressimpex.com/assets/images/logo.png">
+
     <link rel="stylesheet" href="assets/css/styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "Bethel Express & Impex",
+      "image": "https://bethelexpressimpex.com/assets/images/logo.png",
+      "@id": "https://bethelexpressimpex.com",
+      "url": "https://bethelexpressimpex.com",
+      "telephone": "+91-XXXXXXXXXX",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Your Office Street",
+        "addressLocality": "Chennai",
+        "addressRegion": "TN",
+        "postalCode": "600XXX",
+        "addressCountry": "IN"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 13.0827,
+        "longitude": 80.2707
+      },
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday"
+        ],
+        "opens": "09:00",
+        "closes": "18:00"
+      },
+      "sameAs": [
+        "https://www.facebook.com/bethelexpressimpex",
+        "https://www.linkedin.com/company/bethelexpressimpex"
+      ]
+    }
+    </script>
     <style>
         /* Homepage Specific Enhancements */
         .hero-home {
@@ -930,6 +992,49 @@
                 </a>
             </div>
         </section>
+        <!-- SEO Information Section -->
+        <section class="section-padding bg-light">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6 mb-4 mb-lg-0">
+                        <div class="section-header text-start">
+                            <span class="section-tag" style="color: var(--primary-gold);">Expert Logistics
+                                Support</span>
+                            <h2 style="font-size: 32px; margin-bottom: 25px;">Premium International Courier Services in
+                                Chennai</h2>
+                            <p style="margin-bottom: 20px;">Bethel Express & Impex provides the most reliable and
+                                cost-effective <strong>international courier services in Chennai</strong>. Whether you
+                                are shipping personal effects, commercial samples, or pharmaceutical supplies, we ensure
+                                your cargo reaches its destination safely and on time.</p>
+                            <div class="check-list">
+                                <li><i class="fas fa-check-circle"></i> <span><strong>DHL Courier Chennai:</strong> Fast
+                                        and trackable express shipping.</span></li>
+                                <li><i class="fas fa-check-circle"></i> <span><strong>FedEx Shipping India:</strong>
+                                        Priority international door-to-door delivery.</span></li>
+                                <li><i class="fas fa-check-circle"></i> <span><strong>UPS Global Logistics:</strong>
+                                        Reliable freight and small parcel solutions.</span></li>
+                                <li><i class="fas fa-check-circle"></i> <span><strong>Aramex Services:</strong>
+                                        Specialized Middle East and global connectivity.</span></li>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div
+                            style="background: var(--primary-dark); padding: 40px; border-left: 5px solid var(--primary-gold); border-radius: 4px;">
+                            <h3 style="color: white; margin-bottom: 20px; font-size: 24px;">Global Shipping Hub</h3>
+                            <p style="color: rgba(255,255,255,0.7); font-size: 15px; line-height: 1.8;">From our
+                                strategic hub in <strong>Nungambakkam, Chennai</strong>, we manage shipments to over 200
+                                countries including USA, UK, UAE, Australia, and Canada. Our partnership with Tier-1
+                                carriers allows us to offer wholesale rates with premium handling for every package.</p>
+                            <a href="calculator.html" class="btn btn-outline"
+                                style="margin-top: 20px; border-color: var(--primary-gold); color: var(--primary-gold);">Calculate
+                                Shipping Rates</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </main>
 
     <footer>
@@ -1028,7 +1133,7 @@
     </footer>
 
     <script type="module">
-        import { initRealTimePricing, calculateShippingCost } from "./pricing-engine.js";
+        import { initRealTimePricing, calculateShippingCost } from "./assets/js/pricing-engine.js";
 
         (async function () {
             'use strict';

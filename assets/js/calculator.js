@@ -6,7 +6,7 @@ import {
     initRealTimePricing,
     calculateShippingCost,
     formatCurrency
-} from "../../pricing-engine.js";
+} from "./pricing-engine.js";
 
 document.addEventListener('DOMContentLoaded', async function () {
 

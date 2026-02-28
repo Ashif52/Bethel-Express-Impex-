@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Sitemap: https://bethelexpressimpex.com/sitemap.xml
+
+# Prevent indexing admin pages
+Disallow: /admin
+Disallow: /admin.html
+Disallow: /seed-database.js
+Disallow: /firestore.rules
