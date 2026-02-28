@@ -614,11 +614,11 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // Show bubble animation handled by CSS keyframes
-        // Ensure visibility after delay
+        // Show bubble after delay with smooth CSS transition
         setTimeout(() => {
             bubble.style.opacity = '1';
             bubble.style.transform = 'translateY(0)';
+            bubble.classList.add('visible');
         }, 3000);
     }
 
