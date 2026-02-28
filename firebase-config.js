@@ -7,12 +7,13 @@ import { getAuth } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT_ID.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    apiKey: "AIzaSyBWuPc-tg7bFEsv7RXSQQFcg_u1KqNy0Jc",
+    authDomain: "bethelexpressimpex-804c7.firebaseapp.com",
+    projectId: "bethelexpressimpex-804c7",
+    storageBucket: "bethelexpressimpex-804c7.firebasestorage.app",
+    messagingSenderId: "955694071656",
+    appId: "1:955694071656:web:bab83ca98f7ffb36a0e0dd",
+    measurementId: "G-E6ZCC97BZS"
 };
 
 // Initialize Firebase

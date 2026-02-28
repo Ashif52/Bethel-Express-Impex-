@@ -10,7 +10,7 @@ import {
 import { auth, db } from "./firebase-config.js";
 
 // --- DEMO MODE CONFIG ---
-export const IS_DEMO_MODE = true;
+export const IS_DEMO_MODE = false;
 const DEMO_USER = { email: "admin@bethel.com", password: "admin123", uid: "demo-user-123", role: "admin" };
 
 let authCallback = null;

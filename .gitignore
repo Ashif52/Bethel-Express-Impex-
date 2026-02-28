@@ -1,0 +1,15 @@
+# IDE / Tools
+.vscode/
+.DS_Store
+*.log
+
+# Deployment
+.firebase/
+.firebaserc
+firebase.json
+
+# Dependencies
+node_modules/
+
+# Local data (if switching back to demo mode)
+*.db
